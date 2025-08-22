@@ -376,7 +376,7 @@ export interface ProductContent {
 }
 
 export interface ArrivalsAndCategory {
-  category: ProductCategory;
+  category: Category;
   products: Product[];
 }
 export interface CartItem {

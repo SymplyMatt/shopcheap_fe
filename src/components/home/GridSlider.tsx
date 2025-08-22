@@ -80,7 +80,7 @@ const GridSlider: React.FC<ComponentProp> = ({categoriesAndProducts=[]}) => {
                             <div className="w-full h-full flex flex-col justify-center transition-all duration-1000 hover:z-10 relative bg-white">
                                 <div className="w-full flex items-center justify-center new_arrivals_img relative">
                                     <img 
-                                        src={categoryAndProduct.products[0]?.images[0]?.src || categoryAndProduct.category?.image?.src} 
+                                        src={ categoryAndProduct.category.image } 
                                         className="w-[80%] h-[80%] object-contain"
                                         alt={`Arrival ${index + 1}`}
                                     />
@@ -88,12 +88,12 @@ const GridSlider: React.FC<ComponentProp> = ({categoriesAndProducts=[]}) => {
                                         View all <img src="/images/arrowdirection.svg" alt="Arrow" />
                                     </div>
                                 </div>
-                                <div className="w-full h-[60px] border-t border-[#D6D6D5] flex items-center justify-between">
-                                    <div className="w-full flex items-center justify-center text-[18px] font-medium leading-[27px] tracking-[0%]">
-                                        {categoryAndProduct.category.name.replace(/&amp;/g, "&").length < 12 ? categoryAndProduct.category.name.replace(/&amp;/g, "&") : categoryAndProduct.category.name.replace(/&amp;/g, "&").slice(0, 12) + "..."}
+                                <div className="w-full h-[60px] border-t border-[#D6D6D5] grid grid-cols-3 items-center justify-between">
+                                    <div className="col-span-2 w-full flex items-center text-[12px] font-medium leading-[27px] tracking-[0%] px-[12px]">
+                                        {categoryAndProduct.category?.name.length < 17 ? categoryAndProduct.category?.name : categoryAndProduct.category?.name.slice(0, 17) + "..."}
                                     </div>
-                                    <div className="h-[20.5px] bg-[#D6D6D5] w-[1px]" />
-                                    <div className="w-full flex items-center justify-center text-[18px] font-medium leading-[27px] tracking-[0%]">
+                                    <div className="col-span-1 w-full flex items-center justify-center font-medium leading-[27px] tracking-[0%] text-[12px] gap-[8px]">
+                                        <div className="h-[20.5px] bg-[#D6D6D5] w-[1px]" />
                                         {categoryAndProduct.products.length} Products
                                     </div>
                                 </div>

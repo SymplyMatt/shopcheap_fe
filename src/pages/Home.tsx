@@ -1,6 +1,5 @@
 import HeroSlider from "../components/home/HeroSlider";
 import CategoriesAndProducts from "../components/home/CategoriesAndProducts";
-import FeaturedBrands from "../components/home/FeaturedBrands";
 import NewArrivals from "../components/home/NewArrivals";
 import Layout from "./Layout";
 import FlashSales from "../components/home/FlashSales";
@@ -9,7 +8,7 @@ import Ads from "../components/home/Ads";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 const Home = () => {
-    const { categories, products } = useSelector((state: RootState) => state.app);
+    const { categories, products, newArrivals } = useSelector((state: RootState) => state.app);
 
     return (
         <Layout>
@@ -17,8 +16,9 @@ const Home = () => {
             {categories.length ? <RoundCategoriesSlider categories={categories} /> : <></>}
             <FlashSales />
             {products.length ? <CategoriesAndProducts title="Top Selling" productsToDisplay={products}/> : <></>}
-            {/* {newArrivals.length ? <NewArrivals /> : <></>} */}
+            {newArrivals.length ? <NewArrivals /> : <></>}
             {products.length ? <CategoriesAndProducts title="New Stock" productsToDisplay={products}/> : <></>}
+            <Ads />
         </Layout>
     );
 }

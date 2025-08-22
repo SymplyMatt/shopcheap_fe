@@ -8,7 +8,7 @@ import Search from "../components/common/Search";
 import MobileFooter from "../components/common/MobileFooter";
 import AccountMobile from "../components/common/AccountMobile";
 import { apiRequest, Response } from "../utils/utils";
-import { setCategories, setProducts, setTotalPages } from "../redux/states/app";
+import { setCategories, setNewArrivals, setProducts, setTotalPages } from "../redux/states/app";
 import Loader from "../components/common/Loader";
 import Logout from "../components/common/Logout";
 interface LayoutProps {
@@ -41,6 +41,24 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
                 const res: Response = (await apiRequest("categories"));
                 const categories = res.data;
                 dispatch(setCategories(categories?.results));
+            } catch (error) {
+                console.error("Error in useEffect:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+            const res: Response = await apiRequest("categories/withproducts");
+            const categories = res.data.results;
+            const formatted = categories.map((category: any) => ({
+                category: category,
+                products: category.productCategories.map((pc: any) => pc.product)
+            }));
+            console.log("Categories with products:", formatted);
+            dispatch(setNewArrivals(formatted));
             } catch (error) {
                 console.error("Error in useEffect:", error);
             }
