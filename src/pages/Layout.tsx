@@ -8,7 +8,7 @@ import Search from "../components/common/Search";
 import MobileFooter from "../components/common/MobileFooter";
 import AccountMobile from "../components/common/AccountMobile";
 import { apiRequest, Response } from "../utils/utils";
-import { setProducts, setTotalPages } from "../redux/states/app";
+import { setCategories, setProducts, setTotalPages } from "../redux/states/app";
 import Loader from "../components/common/Loader";
 import Logout from "../components/common/Logout";
 interface LayoutProps {
@@ -33,6 +33,19 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
             }
         };
         products.length < 1 && fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res: Response = (await apiRequest("categories"));
+                const categories = res.data;
+                dispatch(setCategories(categories?.results));
+            } catch (error) {
+                console.error("Error in useEffect:", error);
+            }
+        };
+        fetchData();
     }, []);
 
     if (products?.length === 0 || !products) {

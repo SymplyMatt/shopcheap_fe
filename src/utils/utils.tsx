@@ -369,7 +369,7 @@ export interface ProductContent {
   _id: string;
   id: string;
   productId: string;
-  content: string; // likely HTML string
+  content: string;
   createdBy: string;
   createdAt: string;
   __v: number;

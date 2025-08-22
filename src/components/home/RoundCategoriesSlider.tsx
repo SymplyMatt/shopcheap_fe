@@ -5,13 +5,13 @@ import "swiper/css/navigation";
 import { Autoplay, Navigation } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
-import { ProductCategory } from "../../utils/utils";
+import { Category } from "../../utils/utils";
 interface ComponentProp{
     handleClick?: (category: string) => void;
-    categories?: ProductCategory[];
+    categories?: Category[];
 }
 const RoundCategoriesSlider: React.FC<ComponentProp> = ({ handleClick, categories=[] }) => {
-    const splitedCategories: ProductCategory[][] = [categories,categories,categories]
+    const splitedCategories: Category[][] = [categories,categories,categories]
     const navigate = useNavigate();
     const swiperRef = useRef<SwiperClass | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -50,11 +50,11 @@ const RoundCategoriesSlider: React.FC<ComponentProp> = ({ handleClick, categorie
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
                     onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 >
-                    {[...categories, ...categories].map((category:ProductCategory, index) => (
+                    {[...categories, ...categories].map((category:Category, index) => (
                         <SwiperSlide key={index} className="h-full flex flex-col justify-center !w-auto flex-row slide-in-slide">
                             <div className="flex grid-cols-4 items-center gap-[8px]">
                                     <div className="relative h-full flex justify-center flex-col items-center gap-[8px] cursor-pointer" key={index}>
-                                        <img src={category?.image?.src} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
+                                        <img src={category.image} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
                                         <div className="w-full flex text-center items-center whitespace-nowrap justify-center h-[36px] bg-white px-[20px] font-semibold cursor-pointer" onClick={() => {handleClick ? handleClick(category.name) : navigate('/product/productId')}}>
                                         {category.name.replace(/&amp;/g, "&")}
                                         </div>
@@ -77,13 +77,13 @@ const RoundCategoriesSlider: React.FC<ComponentProp> = ({ handleClick, categorie
                     onSwiper={(swiper) => (swiperRef.current = swiper)}
                     onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                 >
-                    {splitedCategories.map((category:ProductCategory[], index) => (
+                    {splitedCategories.map((category:Category[], index) => (
                         <SwiperSlide key={index} className="h-full flex flex-col justify-center !w-auto flex-row slide-in-slide">
                             <>
                                 <div className="flex grid-cols-4 items-center tmd:hidden">
-                                    {category.slice(0,4).map((category:ProductCategory, index) =>(
+                                    {category.slice(0,4).map((category:Category, index) =>(
                                         <div className="w-[150px] relative h-full flex justify-center flex-col items-center gap-[8px] cursor-pointer" key={index}>
-                                            <img src={category?.image?.src} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
+                                            <img src={category.image} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
                                             <div className="w-full flex text-center items-center whitespace-nowrap justify-center h-[36px] bg-white px-[20px] font-semibold cursor-pointer" onClick={() => {handleClick ? handleClick(category.name) : navigate('/product/productId')}}>
                                                 {category.name.replace(/&amp;/g, "&").length > 12 ?  category.name.replace(/&amp;/g, "&").substring(0,12) + '...' : category.name.replace(/&amp;/g, "&")}
                                             </div>
@@ -91,9 +91,9 @@ const RoundCategoriesSlider: React.FC<ComponentProp> = ({ handleClick, categorie
                                     ))}
                                 </div>
                                 <div className="flex grid-cols-4 items-center tmd:hidden">
-                                    {category.slice(4,8).map((category:ProductCategory, index) =>(
+                                    {category.slice(4,8).map((category:Category, index) =>(
                                         <div className="w-[150px] relative h-full flex justify-center flex-col items-center gap-[8px] cursor-pointer" key={index}>
-                                            <img src={category?.image?.src} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
+                                            <img src={category.image} className="object-contain h-[64px] w-[64px] tmd:w-[100px] tmd:h-[100px] rounded-full" alt="Product" />
                                             <div className="w-full flex text-center items-center whitespace-nowrap justify-center h-[36px] bg-white px-[20px] font-semibold cursor-pointer" onClick={() => {handleClick ? handleClick(category.name) : navigate('/product/productId')}}>
                                                 {category.name.replace(/&amp;/g, "&").length > 12 ?  category.name.replace(/&amp;/g, "&").substring(0,12) + '...' : category.name.replace(/&amp;/g, "&")}
                                             </div>

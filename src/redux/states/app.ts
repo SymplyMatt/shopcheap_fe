@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import utils, { ArrivalsAndCategory, CartItem, Product, ProductCategory, SavedCartItem } from "../../utils/utils";
+import utils, { ArrivalsAndCategory, CartItem, Category, Product, SavedCartItem } from "../../utils/utils";
 interface User {
   name: string;
   email: string;
@@ -23,7 +23,7 @@ interface AppState {
   totalProducts: number;
   totalPages: number;
   currentPage: number;
-  categories: ProductCategory[];
+  categories: Category[];
   newArrivals: ArrivalsAndCategory[];
   userAddress: any
 }
@@ -62,7 +62,7 @@ const app = createSlice({
     setSales: (state, action: PayloadAction<Product[]>) => {
       if (Array.isArray(action.payload)) state.sales = action.payload;
     },
-    setCategories: (state, action: PayloadAction<ProductCategory[]>) => {
+    setCategories: (state, action: PayloadAction<Category[]>) => {
       if (Array.isArray(action.payload)) state.categories = action.payload;
     },
     setNewArrivals: (state, action: PayloadAction<ArrivalsAndCategory[]>) => {

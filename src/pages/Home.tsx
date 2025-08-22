@@ -9,13 +9,13 @@ import Ads from "../components/home/Ads";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 const Home = () => {
-    const { categories, products, sales, newArrivals } = useSelector((state: RootState) => state.app);
+    const { categories, products } = useSelector((state: RootState) => state.app);
 
     return (
         <Layout>
             <HeroSlider />
-            {/* {categories.length ? <RoundCategoriesSlider categories={categories} /> : <></>} */}
-            {/* {sales.length ? <FlashSales /> : <></>} */}
+            {categories.length ? <RoundCategoriesSlider categories={categories} /> : <></>}
+            <FlashSales />
             {products.length ? <CategoriesAndProducts title="Top Selling" productsToDisplay={products}/> : <></>}
             {/* {newArrivals.length ? <NewArrivals /> : <></>} */}
             {products.length ? <CategoriesAndProducts title="New Stock" productsToDisplay={products}/> : <></>}
