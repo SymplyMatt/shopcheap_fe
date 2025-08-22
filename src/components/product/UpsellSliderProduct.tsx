@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../redux/store";
-import { addToWishlist, removeFromWishlist } from "../../redux/states/app";
 import { useDispatch } from "react-redux";
 
 interface CategoriesAndProductsProps {
@@ -25,14 +24,12 @@ const UpsellSliderProduct: React.FC<CategoriesAndProductsProps> =({product}) => 
         product.image,
         ...product.productOptions
         .map((opt) => opt.image)
-        .filter((img): img is string => Boolean(img)) // keep only valid strings
+        .filter((img): img is string => Boolean(img))
     ];
     const [hovered, setHovered] = useState<boolean>(false);
     const [activeImage, setActiveImage] = useState<string>(allImages[0]);
     const showImage = hovered ? activeImage : allImages[0];
     const { wishlist } = useSelector((state: RootState) => state.app);
-    const isInWishlist = wishlist.some((item) => item.id === product.id);
-    const dispatch = useDispatch();
     useEffect(() => {
         if (hovered) {
             const intervalId = setInterval(() => {
@@ -54,16 +51,7 @@ const UpsellSliderProduct: React.FC<CategoriesAndProductsProps> =({product}) => 
             }}>
             <div className="w-[300px] h-[400px] tmd:w-full tmd:h-[400px] bg-white border border-[#E6E6E6] flex items-center justify-center relative">
                 <img src={showImage} className="w-full h-full object-contain" />
-                {!isInWishlist && <img src="/images/heart.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" 
-                    onClick={() => {
-                        dispatch(addToWishlist(product));
-                    }}
-                />}
-                {isInWishlist && <img src="/images/heartfilled.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" alt="Remove from wishlist"
-                    onClick={() => {
-                        dispatch(removeFromWishlist(product.id));
-                    }}
-                />}
+                {product.inSeason ? <div className="absolute top-[20px] right-[10px] bg-[#10583E] text-white py-[4px] px-[8px] rounded-[6px]"> in season</div> : ""}
                 <img src="/images/rec_plus.svg" className="cursor-pointer absolute bottom-[20px] right-[10px]" />
                 <div className="w-full h-[80px] border-t border-b border-[#D6D6D5] cursor-pointer absolute bottom-[0px] right-[0px] bg-white flex items-center justify-center p-[16px] opacity-0 translate-y-4 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
                     <div

@@ -48,16 +48,7 @@ const CategoriesAndProductsProduct: React.FC<CategoriesAndProductsProps>= ({prod
     <div className="col-span-1 flex flex-col items-center h-fit tmd:h-[500px] group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <div className="w-full h-[200px] tmd:h-[400px] bg-white border border-[#E6E6E6] flex items-center justify-center relative">
             <img src={showImage} className="w-full h-full object-contain" />
-            {!isInWishlist && <img src="/images/heart.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" 
-                    onClick={() => {
-                        dispatch(addToWishlist(product));
-                    }}
-                />}
-                {isInWishlist && <img src="/images/heartfilled.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" alt="Remove from wishlist"
-                    onClick={() => {
-                        dispatch(removeFromWishlist(String(product.id)));
-                    }}
-                />}
+            {product.inSeason ? <div className="absolute top-[20px] right-[10px] bg-[#10583E] text-white py-[4px] px-[8px] rounded-[6px]"> in season</div> : ""}
             <img src="/images/rec_plus.svg" className="cursor-pointer absolute bottom-[20px] right-[10px]"alt="Add" />
             <div className="w-full h-[80px] border-t border-b border-[#D6D6D5] cursor-pointer absolute bottom-[0px] right-[0px] bg-white flex items-center justify-center p-[16px] opacity-0 translate-y-4 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
                 <div 
