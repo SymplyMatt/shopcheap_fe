@@ -56,7 +56,7 @@ const allImages: string[] = [
                 />}
                 {isInWishlist && <img src="/images/heartfilled.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" alt="Remove from wishlist"
                     onClick={() => {
-                        dispatch(removeFromWishlist(Number(product.id)));
+                        dispatch(removeFromWishlist(String(product.id)));
                     }}
                 />}
             <img src="/images/rec_plus.svg" className="cursor-pointer absolute bottom-[20px] right-[10px]"alt="Add" />
