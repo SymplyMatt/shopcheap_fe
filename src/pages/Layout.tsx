@@ -57,7 +57,6 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
                 category: category,
                 products: category.productCategories.map((pc: any) => pc.product)
             }));
-            console.log("Categories with products:", formatted);
             dispatch(setNewArrivals(formatted));
             } catch (error) {
                 console.error("Error in useEffect:", error);
