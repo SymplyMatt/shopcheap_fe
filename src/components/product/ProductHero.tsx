@@ -13,16 +13,22 @@ interface CategoriesAndProductsProps {
     reviews: any[];
 }
 const ProductHero : React.FC<CategoriesAndProductsProps> = ({product, reviews}) => {
-    const discount = (product.regular_price && product.price && product.regular_price > product.price) ? (((Number(product.regular_price) - Number(product.price)) / Number(product.regular_price)) * 100) : 0;
-    const price = Number(product.regular_price);
-    const priceAfterDiscount = Number(product.price);
+    const discount = 0;
+    const price = Number(1000);
+    const priceAfterDiscount = Number(1000);
     const swiperRef = useRef<SwiperClass | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [activeImage, setActiveImage] = useState(product.images[0].src);
+    const [activeImage, setActiveImage] = useState(product.image);
     const { wishlist,cart, loggedInUser } = useSelector((state: RootState) => state.app);
     const isInWishlist = wishlist.some((item) => item.id === product.id);
     const cartEntry = cart.find((item) => item.product.id === product.id);
     const [isMobileView, setIsMobileView] = useState(false);
+    const allImages: string[] = [
+        product.image,
+        ...product.productOptions
+        .map((opt) => opt.image)
+        .filter((img): img is string => Boolean(img)) // keep only valid strings
+    ];
     const renderCustomPagination = () => {
         const totalSlides = 6; 
         return (
@@ -46,16 +52,16 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product, reviews}) 
     };
     const dispatch = useDispatch();
     useEffect(()=>{
-        setActiveImage(product.images[0].src);
+        setActiveImage(product.image);
         setActiveIndex(0);
         swiperRef.current?.slideTo(0);
     },[product]);
     const addProductToCart = async () =>{
         dispatch(addToCart({quantity:1,product}));
-        loggedInUser && await apiRequest("custom/v1/cart/add", {method: "POST", body: { product_id: product.id, quantity: 1 }, baseurl:'https://newshop.tn/wp-json/', useToken: true});
+        loggedInUser && await apiRequest("custom/v1/cart/add");
     }
     const removeProductFromCart = async () =>{
-        loggedInUser && await apiRequest("custom/v1/cart/remove", {method: "POST", body: { key: cartEntry?.key }, baseurl:'https://newshop.tn/wp-json/', useToken: true});
+        loggedInUser && await apiRequest("custom/v1/cart/remove");
         dispatch(removeFromCart(product.id));
     }
     useEffect(() => {
@@ -71,11 +77,11 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product, reviews}) 
     return (
         <div className="flex flex-col w-full bg-[#F3F3F3] tmd:grid tmd:grid-cols-[17%_50%_33%] tmd:px-[50px] tmd:gap-[20px] items-center justify-center">
             <div className={`flex items-center justify-center w-full order2`}>
-                <div className={`flex items-center flex-col tmd:flex-row justify-center w-[195px] bg-white gap-[16px] p-[16px] ${isMobileView && 'w-full'}`} style={{ height: isMobileView ? '150px' : product.images.length > 3 ? '512px' : `${(product.images.length * 140) + 32}px` }}>
-                    {product.images.length > 3 && <div className={`h-[4px] tmd:h-full ${isMobileView && 'w-full'}`}>{renderCustomPagination()}</div>}
+                <div className={`flex items-center flex-col tmd:flex-row justify-center w-[195px] bg-white gap-[16px] p-[16px] ${isMobileView && 'w-full'}`} style={{ height: isMobileView ? '150px' : allImages.length > 3 ? '512px' : `${(allImages.length * 140) + 32}px` }}>
+                    { allImages.length > 3 && <div className={`h-[4px] tmd:h-full ${isMobileView && 'w-full'}`}>{renderCustomPagination()}</div>}
                     <Swiper
                         direction={!isMobileView ? "vertical" : "horizontal"}
-                        slidesPerView={product.images.length > 3 ? 3.2 : product.images.length}
+                        slidesPerView={allImages.length > 3 ? 3.2 : allImages.length}
                         spaceBetween={0}
                         loop={true} 
                         // autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -85,11 +91,11 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product, reviews}) 
                         onSwiper={(swiper) => (swiperRef.current = swiper)}
                         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
                     >
-                        {product.images.map((image,index) => (
-                            <SwiperSlide className={`${isMobileView ? 'w-100important h-[100px]': 'w-full h-[150px] px150'}`} onClick={()=>setActiveImage(image.src)} key={index} style={{ width: isMobileView ? '100px' : '', height: isMobileView ? '100px' : ''}}>
+                        {allImages.map((image,index) => (
+                            <SwiperSlide className={`${isMobileView ? 'w-100important h-[100px]': 'w-full h-[150px] px150'}`} onClick={()=>setActiveImage(image)} key={index} style={{ width: isMobileView ? '100px' : '', height: isMobileView ? '100px' : ''}}>
                                 <div className={`${isMobileView ? 'w-100important h-[100px]' : 'w-full h-[150px]'} border border-[#D6D6D5] bg-[#F3F3F3] flex items-center justify-center cursor-pointer p-[10px] relative`} key={index} style={{ width: isMobileView ? '100px' : '', height: isMobileView ? '100px' : ''}}>
-                                    <img src={image.src} className="h-full object-contain"/>
-                                    {image.src === activeImage && <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                    <img src={image} className="h-full object-contain"/>
+                                    {image === activeImage && <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                                         <rect x="1" y="1" width="48" height="48" rx="24" fill="#F3F3F3"/>
                                         <rect x="1" y="1" width="48" height="48" rx="24" stroke="#D6D6D5"/>
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.1178 25.467C15.9607 25.176 15.9607 24.823 16.1178 24.532C18.0097 21.033 21.5048 18 24.9998 18C28.4948 18 31.9898 21.033 33.8818 24.533C34.0388 24.824 34.0388 25.177 33.8818 25.468C31.9898 28.967 28.4948 32 24.9998 32C21.5048 32 18.0097 28.967 16.1178 25.467Z" stroke="#141511" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -124,7 +130,7 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product, reviews}) 
                         <div className="w-full grid grid-cols-2 items-center border-t border-b border-[#D6D6D5]">
                             <div className="px-[24px] col-span-1 flex flex-col justify-between text-white gap-[4px] border-r border-[#D6D6D5] py-[16px]">
                                 <div className="text-[#676764] font-normal text-[16px] leading-[24px] tracking-[0%] uppercase">Category:</div>
-                                <div className="text-[#141511] font-medium text-[18px] leading-[27px] tracking-[0%]">{product.categories[0].name}</div>
+                                <div className="text-[#141511] font-medium text-[18px] leading-[27px] tracking-[0%]">Category</div>
                             </div>
                             <div className="px-[24px] col-span-1 flex flex-col justify-between text-black gap-[4px] py-[16px]">
                                 <div className="text-[#141511] font-semibold text-[18px] leading-[27px] tracking-[0%]">Brand </div>

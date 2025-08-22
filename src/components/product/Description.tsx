@@ -64,7 +64,7 @@ const Description : React.FC<CategoriesAndProductsProps> =  ({product, reviews})
           }}
         >
           <div ref={descriptionRef} className="p-[16px] tmd:p-[20px] gap-[8px] flex justify-center flex-col">
-            <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
+            <div dangerouslySetInnerHTML={{ __html: product.description }} />
           </div>
         </div>
       </div>
@@ -88,7 +88,11 @@ const Description : React.FC<CategoriesAndProductsProps> =  ({product, reviews})
           }}
         >
           <div ref={featuresRef} className="p-[16px] tmd:p-[20px] gap-[8px] flex justify-center flex-col">
-            <div dangerouslySetInnerHTML={{ __html: product.description }} />
+            {
+              product.productContents.map((content, index) => (
+                <div dangerouslySetInnerHTML={{ __html: content.content }} key={index}/>
+              ))
+            }
           </div>
         </div>
       </div>

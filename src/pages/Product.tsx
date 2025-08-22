@@ -39,8 +39,9 @@ const Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const fetchedProduct = (await apiRequest(`products?include=${product?.related_ids?.join(",")}`)).data;
-        setUpsells(fetchedProduct);
+        const fetchedProduct = (await apiRequest(`products`));
+        const products = fetchedProduct.data;
+        setUpsells(products.results);
       } catch (err) {
         console.error("Error fetching product:", err);
       }
