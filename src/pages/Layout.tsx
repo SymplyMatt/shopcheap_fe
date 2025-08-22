@@ -7,8 +7,8 @@ import { RootState } from "../redux/store";
 import Search from "../components/common/Search";
 import MobileFooter from "../components/common/MobileFooter";
 import AccountMobile from "../components/common/AccountMobile";
-import { apiRequest, Product, Response } from "../utils/utils";
-import { setProducts, setSales, setTotalPages, setTotalProducts } from "../redux/states/app";
+import { apiRequest, Response } from "../utils/utils";
+import { setProducts, setTotalPages } from "../redux/states/app";
 import Loader from "../components/common/Loader";
 import Logout from "../components/common/Logout";
 interface LayoutProps {
@@ -27,6 +27,7 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
                 const productRes: Response = (await apiRequest("products"));
                 const products = productRes.data;
                 dispatch(setProducts(products?.results));
+                dispatch(setTotalPages(products?.pagination?.totalPages));
             } catch (error) {
                 console.error("Error in useEffect:", error);
             }

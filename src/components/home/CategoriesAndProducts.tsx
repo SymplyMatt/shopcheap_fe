@@ -1,9 +1,8 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import CategoriesAndProductsProduct from "./CategoriesAndProductsProduct";
 import { apiRequest, Product, Response, Category } from "../../utils/utils";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { setProducts } from "../../redux/states/app";
 import { useLocation } from "react-router-dom";
 
 interface CategoriesAndProductsProps {
@@ -12,35 +11,22 @@ interface CategoriesAndProductsProps {
   titleComponent?: ReactNode;
   productsToDisplay: Product[];
 }
-
 const CategoriesAndProducts: React.FC<CategoriesAndProductsProps> = ({
   title = "Trending",
   showTitle = true,
   titleComponent = <></>,
   productsToDisplay,
 }) => {
-  const dispatch = useDispatch();
   const location = useLocation();
   const currentPath = location.pathname.split("/")[1];
-
   const { totalPages, wishlist } = useSelector((state: RootState) => state.app);
-
-  const [pages, setPages] = useState<number>(
-    currentPath.includes("wish") ? wishlist.length : totalPages
-  );
+  const [pages, setPages] = useState<number>(currentPath.includes("wish") ? wishlist.length/10 : totalPages);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [activeCategoryProducts, setActiveCategoryProducts] = useState<Product[]>(
-    []
-  );
+  const [activeCategoryProducts, setActiveCategoryProducts] = useState<Product[]>([]);
   const [activeCategoryPages, setActiveCategoryPages] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
   // if no category is active, show all products
-  const filteredProducts =
-    activeCategory === null || !showTitle
-      ? productsToDisplay
-      : activeCategoryProducts;
-
+  const filteredProducts = activeCategory === null || !showTitle ? productsToDisplay : activeCategoryProducts;
   // collect unique categories from products
   const uniqueCategories = useMemo(() => {
     const categoryMap = new Map<string, Category>();
@@ -53,18 +39,14 @@ const CategoriesAndProducts: React.FC<CategoriesAndProductsProps> = ({
     });
     return Array.from(categoryMap.values());
   }, [productsToDisplay]);
-
   // fetch products when category changes
   useEffect(() => {
     const fetchData = async () => {
       try {
         setCurrentPage(1);
-        const products: Response = await apiRequest(
-          `products?category=${activeCategory}&page=${currentPage}&per_page=8`
-        );
-        const totalPages = products.headers["x-wp-totalpages"];
-        if (totalPages) setActiveCategoryPages(parseInt(totalPages as string));
-        setActiveCategoryProducts(products.data as Product[]);
+        const products: Response = await apiRequest(`categories/${activeCategory}/products?page=${currentPage}`);
+        setActiveCategoryProducts(products.data.products.results as Product[]);
+        setActiveCategoryPages(products.data.products.pagination.totalPages);
       } catch (error) {
         console.error("Error in category fetch:", error);
       }
@@ -76,32 +58,9 @@ const CategoriesAndProducts: React.FC<CategoriesAndProductsProps> = ({
       setActiveCategoryProducts([]);
     }
   }, [activeCategory]);
-
-  // fetch products when page changes
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (activeCategory) {
-          const products: Response = await apiRequest(
-            `products?category=${activeCategory}&page=${currentPage}&per_page=8`
-          );
-          setActiveCategoryProducts(products.data as Product[]);
-        } else {
-          const products: Response = await apiRequest(
-            `products?page=${currentPage}&per_page=8`
-          );
-          dispatch(setProducts(products.data));
-        }
-      } catch (error) {
-        console.error("Error in page fetch:", error);
-      }
-    };
-    currentPage && fetchData();
-  }, [currentPage]);
-
   // update pages when wishlist or total changes
   useEffect(() => {
-    setPages(currentPath.includes("wish") ? wishlist.length : totalPages);
+    setPages(currentPath.includes("wish") ? Math.round(wishlist.length/10) : totalPages);
   }, [totalPages, wishlist]);
 
   return (
@@ -237,7 +196,7 @@ const CategoriesAndProducts: React.FC<CategoriesAndProductsProps> = ({
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
-            onClick={() => setCurrentPage(currentPage + 1)}
+            onClick={() => !((!activeCategory && currentPage === pages) || (activeCategory && currentPage === activeCategoryPages)) && setCurrentPage(currentPage + 1)}
           >
             Next
             <svg

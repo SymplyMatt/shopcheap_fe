@@ -112,10 +112,10 @@ const app = createSlice({
     addToWishlist: (state, action: PayloadAction<Product>) => {
       state.wishlist = [...state.wishlist, action.payload];
     },
-    removeFromCart: (state, action: PayloadAction<number>) => {
+    removeFromCart: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.filter((item:CartItem) => item.product.id !== action.payload);
     },
-    removeFromWishlist: (state, action: PayloadAction<number>) => {
+    removeFromWishlist: (state, action: PayloadAction<string>) => {
       state.wishlist = state.wishlist.filter((item:Product) => item.id !== action.payload);
     },
     emptyCart: (state) => {

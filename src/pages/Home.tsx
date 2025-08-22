@@ -15,7 +15,7 @@ const Home = () => {
         <Layout>
             <HeroSlider />
             {/* {categories.length ? <RoundCategoriesSlider categories={categories} /> : <></>} */}
-            {sales.length ? <FlashSales /> : <></>}
+            {/* {sales.length ? <FlashSales /> : <></>} */}
             {products.length ? <CategoriesAndProducts title="Top Selling" productsToDisplay={products}/> : <></>}
             {/* {newArrivals.length ? <NewArrivals /> : <></>} */}
             {products.length ? <CategoriesAndProducts title="New Stock" productsToDisplay={products}/> : <></>}

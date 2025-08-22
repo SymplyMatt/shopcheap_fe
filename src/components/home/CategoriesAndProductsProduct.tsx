@@ -47,7 +47,7 @@ const allImages: string[] = [
     }, [hovered, allImages]);
   return (
     <div className="col-span-1 flex flex-col items-center h-fit tmd:h-[500px] group" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
-        <div className="w-full h-[200px] tmd:h-[400px] bg-[#F3F3F3] border border-[#E6E6E6] flex items-center justify-center relative">
+        <div className="w-full h-[200px] tmd:h-[400px] bg-white border border-[#E6E6E6] flex items-center justify-center relative">
             <img src={showImage} className="w-full h-full object-contain" />
             {!isInWishlist && <img src="/images/heart.svg" className="cursor-pointer absolute top-[20px] right-[10px] transition-transform duration-200 hover:scale-[0.9]" 
                     onClick={() => {
