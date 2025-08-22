@@ -16,7 +16,6 @@ const Product = () => {
   const productFromRoute = location.state?.product as ProductInterface | undefined;
   const [product, setProduct] = useState<ProductInterface | null>(productFromRoute || null);
   const [upsells, setUpsells] = useState<ProductInterface[]>([]);
-  const [reviews, setReviews] = useState<any>([]);
   const [loading, setLoading] = useState(!productFromRoute);
   useEffect(() => {
     const fetchProduct = async () => {
@@ -30,8 +29,6 @@ const Product = () => {
             setLoading(false);
         }
         }
-        const reviews = await apiRequest(`products/reviews?product=${id}`);
-        setReviews(reviews || []);
     };
     fetchProduct();
   }, [product, id]);
@@ -56,8 +53,8 @@ const Product = () => {
 
   return (
     <Layout>
-      <ProductHero product={product} reviews={reviews}/>
-      <Description product={product} reviews={reviews}/>
+      <ProductHero product={product}/>
+      <Description product={product}/>
       {products.length > 0 && <UpsellSlider products={upsells} />}
     </Layout>
   );
