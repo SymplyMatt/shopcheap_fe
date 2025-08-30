@@ -20,12 +20,11 @@ const CategoriesAndProductsProduct: React.FC<CategoriesAndProductsProps>= ({prod
         ? `₦${minPrice.toLocaleString()}` 
         : `₦${minPrice.toLocaleString()} - ₦${maxPrice.toLocaleString()}`;
     }
-    // collect product image + option images
     const allImages: string[] = [
         product.image,
         ...product.productOptions
         .map((opt) => opt.image)
-        .filter((img): img is string => Boolean(img)) // keep only valid strings
+        .filter((img): img is string => Boolean(img))
     ];
     const [hovered, setHovered] = useState<boolean>(false);
     const [activeImage, setActiveImage] = useState<string>(allImages[0]);

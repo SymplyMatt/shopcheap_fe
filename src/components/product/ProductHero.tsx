@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/states/app";
+import { useParams } from "react-router-dom";
 
 interface CategoriesAndProductsProps {
     product: Product;
@@ -18,9 +19,9 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product}) => {
     const { cart, loggedInUser } = useSelector((state: RootState) => state.app);
     const cartEntry = cart.find((item) => item.product.id === product.id);
     const dispatch = useDispatch();
-    
+    const { id } = useParams();
     const addProductToCart = async () =>{
-        dispatch(addToCart({quantity:1,product}));
+        dispatch(addToCart({ quantity:1,product: { ...product, productOptions: selectedOption ? [selectedOption] : [] } }));
         loggedInUser && await apiRequest("custom/v1/cart/add");
     }
     
@@ -48,7 +49,11 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product}) => {
             ? `₦${minPrice.toLocaleString()}` 
             : `₦${minPrice.toLocaleString()} - ₦${maxPrice.toLocaleString()}`;
     }
-    
+    useEffect(()=>{
+        setSelectedOption(null);
+        setActiveImage(product.image);
+        setIsDropdownOpen(false);
+    },[id]);
     return (
         <div className="flex flex-col w-full bg-white tmd:grid tmd:grid-cols-[_50%_50%] tmd:px-[50px] tmd:gap-[20px] items-center justify-center">
             <div className="flex items-center justify-center w-full order1">
@@ -106,7 +111,7 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product}) => {
                                 <div className="h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3]">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}} className="cursor-pointer"><path d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/></svg>
                                 </div>
-                                <span>3</span>
+                                <span className="font-bold">3</span>
                                 <div className="h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3]">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}} className="cursor-pointer"><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>
                                 </div>
