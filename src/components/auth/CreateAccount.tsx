@@ -3,8 +3,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { setAuthPage, setSignupValues } from "../../redux/states/auth";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import utils, { apiRequest } from "../../utils/utils";
-import Loader from "../common/Loader";
+import { apiRequest } from "../../utils/utils";
 
 const CreateAccount = () => {
   const [loading, setLoading] = useState(false);
@@ -12,25 +11,25 @@ const CreateAccount = () => {
   const { signupValues } = useSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const handleBack = () => {
     dispatch(setAuthPage("emaillogin"));
   }
   const signUpUser = async () => {
     setLoading(true);
-    const response: any = await apiRequest("custom/v1/signup", {method: "POST", body: { first_name: signupValues.first_name, password: signupValues.password, email: signupValues.email, phone: signupValues.phone }, baseurl:'https://newshop.tn/wp-json/'});
+    setErrorMessage('');
+    const response: any = await apiRequest("users", 'POST', { email: signupValues.email, password: signupValues.password, firstname: signupValues.firstname, lastname: signupValues.lastname, phone: signupValues.phone, whatsapp: signupValues.phone });
     setLoading(false);
-    console.log(response);
-    if(!response.data && response.response) {
-      utils.createErrorNotification(response.response.data.message || "An error occurred while signing you in. Please try again.", 3000);
-      dispatch(setAuthPage(null));
+    if(response.status !== 201){
+      setErrorMessage(response.data.message || "An error occurred while signing you up. Please try again.");
       return
     };
-    if(response.data && response.status == 200) dispatch(setAuthPage("verify-email"));
+    if(response.data) dispatch(setAuthPage("verify-email"));
   }
   useEffect(()=>{
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    setDisabled(!(emailRegex.test(signupValues.email) && passwordStrengthScore(signupValues.password) > 2 && signupValues.first_name.length > 0 && signupValues.phone.length > 8));
-  },[signupValues]);
+    setDisabled(!(emailRegex.test(signupValues.email) && passwordStrengthScore(signupValues.password) > 2 && signupValues.firstname.length > 0 && signupValues.lastname.length > 0 && signupValues.phone.length > 8) || loading);
+  },[signupValues, loading]);
 
   function passwordStrengthScore(str: string): number {
     let score = 0;
@@ -41,10 +40,6 @@ const CreateAccount = () => {
     if (hasSymbol) score++;
     if (isLongEnough) score++;
     return score;
-  }
-  
-  if(loading){
-    return <Loader />
   }
   return (
     <div className="w-[500px] h-full bg-white border border-[#D6D6D5] pb-[40px] tmd:p-[38px] flex flex-col items-center h_content overflow-y-scroll login">
@@ -67,14 +62,11 @@ const CreateAccount = () => {
                   <label className="text-[#141511] font-semibold">Email</label>
                   <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="mail@gmail.com" value={signupValues.email} onChange={(e)=>dispatch(setSignupValues({...signupValues, email:e.currentTarget.value}))}/>
                   <label className="text-[#141511] font-semibold">First name</label>
-                  <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="Maulana" value={signupValues.first_name} onChange={(e)=>dispatch(setSignupValues({...signupValues, first_name:e.currentTarget.value}))}/>
-                  <label className="text-[#141511] font-semibold">Mobile number</label>
+                  <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="Maulana" value={signupValues.firstname} onChange={(e)=>dispatch(setSignupValues({...signupValues, firstname:e.currentTarget.value}))}/>
+                  <label className="text-[#141511] font-semibold">Last name</label>
+                  <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="Maulana" value={signupValues.lastname} onChange={(e)=>dispatch(setSignupValues({...signupValues, lastname:e.currentTarget.value}))}/>
+                  <label className="text-[#141511] font-semibold">WhatsApp/Mobile number</label>
                   <div className="w-full flex items-center">
-                    <div className="h-[48px] bg-[#F3F3F3] flag-container min-w-[85px] border-r border-[#D6D6D5] flex items-center justify-center text-[#676764] p-[8px] gap-[4px] cursor-pointer">
-                        <img src="/images/tunisia.svg" className="w-[24px] h-[24px]"/>
-                        +1
-                        <img src="/images/caretflag.svg" className="w-[24px] h-[24px]"/>
-                    </div>
                     <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="Enter mobile number" value={signupValues.phone} onChange={(e)=>dispatch(setSignupValues({...signupValues, phone:e.currentTarget.value}))}/>
                     </div>
                   <label className="text-[#141511] font-semibold">Password</label>
@@ -92,16 +84,12 @@ const CreateAccount = () => {
                     <div className="text-[#676764] flex items-center gap-[8px] text-left text-[14px]">At least 1 number, 8 characters, 1 symbol</div>
                 </div>
               </div>
-              <div className={`flex h-[48px] bg-[#141511] w-full cursor-pointer text-white items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${loading ? 'cursor-wait' : ''}`} 
+              {errorMessage ? <div className="text-[#AA2924] text-[14px]">{ errorMessage }</div> : ''}
+              <div className={`flex h-[48px] bg-[#141511] w-full cursor-pointer text-white items-center justify-center ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`} 
                 onClick={() => {
                   !disabled && signUpUser();
               }}>REGISTER</div>
               <div className="text-[#676764] flex items-center gap-[8px] cursor-pointer">Already have an account? <span className="font-semibold text-[#141511] underline" onClick={() => dispatch(setAuthPage('emaillogin'))}>Sign in</span></div>
-              <div className="text-[#676764] text-center">Or</div>
-              <div className="w-full flex flex-col justify-center gap-[12px]">
-                  <div className="uppercase flex h-[36px] bg-[#fff] w-full cursor-pointer items-center justify-center border border-[#D6D6D5] text-[#141511] text-[14px] font-semibold gap-[8px]"><img src="/images/google.svg" /> Signup with Google</div>
-                  <div className="uppercase flex h-[36px] bg-[#fff] w-full cursor-pointer items-center justify-center border border-[#D6D6D5] text-[#141511] text-[14px] font-semibold gap-[8px]"><img src="/images/apple.svg" /> Signup with Google</div>
-              </div>
               <div className="text-[#676764] text-[16px] leading-[150%]"> By clicking Sign in, Continue with Google, Facebook, or Apple, you agree to Drest's <span className="underline cursor-pointer">Terms of Use</span> and <span className="underline cursor-pointer">Privacy Policy.</span></div>
             </div>
         </div>
