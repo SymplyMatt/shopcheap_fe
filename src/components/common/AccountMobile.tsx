@@ -1,13 +1,23 @@
-import { AppDispatch } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import Footer from "./Footer";
 import { setSearchMode, setShowAccount, setShowLogout } from "../../redux/states/app";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AccountMobile = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const { loggedInUser } = useSelector((state: RootState) => state.app);
+    function formatDate(date: Date | string): string {
+        const d = typeof date === "string" ? new Date(date) : date;
+        return d.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    }
   return (
     <>
         <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.4, ease: "easeOut" }} className="w-full h-[100vh] fixed top-0 right-0 bg-[#1415114D] z-10 flex flex-col tmd:pt-[46px] pb-[80px] overflow-scroll">
@@ -26,11 +36,11 @@ const AccountMobile = () => {
                         <div className="flex flex-col h-full justify-between w-[55%] gap-[8px]">
                             <div className="flex flex-col gap-[4px]">
                                 <div className="text-[14px] text-[#141511] font-medium">Name</div>
-                                <div className="text-[14px] text-[#141511]">John Doe</div>
+                                <div className="text-[14px] text-[#141511]">{ loggedInUser?.firstname } {loggedInUser?.lastname}</div>
                             </div>
                             <div className="flex flex-col gap-[4px]">
                                 <div className="text-[14px] text-[#141511] font-medium">Member Since</div>
-                                <div className="text-[14px] text-[#141511]">March 20, 2025</div>
+                                <div className="text-[14px] text-[#141511]">{ formatDate(loggedInUser?.createdAt as string)}</div>
                             </div>
                             <div className="w-full flex items-center justify-center border border-[#D6D6D5] h-[36px] text-[#141511] font-medium text-[#141511]" onClick={()=>{
                                 dispatch(setShowAccount(false));

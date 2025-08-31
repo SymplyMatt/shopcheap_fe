@@ -37,7 +37,7 @@ const UserInfo = () => {
                 <div className="flex gap-[8px] cursor-pointer">
                     <img src="/images/userimage.svg"/>
                     <div className="flex flex-col justify-between h-full">
-                        <div className="text-[12px] font-medium">Hello {loggedInUser.displayName}</div>
+                        <div className="text-[12px] font-medium">Hello {loggedInUser.firstname}</div>
                         <div className="text-[14px] font-semibold">My Account</div>
                     </div>
                     {!showLanguages && <img src="/images/caretdownsm.svg" />}
