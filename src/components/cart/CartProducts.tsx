@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addToWishlist, emptyCart, removeFromCart, removeFromWishlist, updateCart } from "../../redux/states/app";
+import { emptyCart, removeFromCart, updateCart } from "../../redux/states/app";
 import { useSelector } from "react-redux";
 import { CartItem, apiRequest } from "../../utils/utils";
 
 const CartProducts = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { cart, wishlist, loggedInUser } = useSelector((state: RootState) => state.app);
+    const { cart, loggedInUser } = useSelector((state: RootState) => state.app);
     const clearCart = async () =>{
         loggedInUser && await apiRequest("custom/v1/cart/clear");
         dispatch(emptyCart());

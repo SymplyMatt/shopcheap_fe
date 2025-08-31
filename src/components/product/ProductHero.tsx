@@ -1,6 +1,6 @@
 import "swiper/css";
 import "swiper/css/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { apiRequest, Product, ProductOption } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
