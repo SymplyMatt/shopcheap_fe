@@ -17,12 +17,17 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product}) => {
     const [activeImage, setActiveImage] = useState(product.image);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const { cart, loggedInUser } = useSelector((state: RootState) => state.app);
-    const cartEntry = cart.find((item) => item.product.id === product.id);
+    const cartEntry = selectedOption ? cart.filter((item) => item.product.productOptions.map(i=>i.id)[0] === selectedOption.id)[0] : null;
     const dispatch = useDispatch();
     const { id } = useParams();
-    const addProductToCart = async () =>{
-        dispatch(addToCart({ quantity:1,product: { ...product, productOptions: selectedOption ? [selectedOption] : [] } }));
-        loggedInUser && await apiRequest("custom/v1/cart/add");
+    const addProductToCart = async (quantity: number) =>{
+        const key = cartEntry ? cartEntry.key : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        dispatch(addToCart({ key, quantity:quantity, product: { ...product, productOptions: selectedOption ? [selectedOption] : [] } }));
+        loggedInUser && await apiRequest("cart", "POST", {
+            "productId": product.id,
+            "productOptionId": selectedOption ? selectedOption.id : null,
+            "quantity": quantity
+        });
     }
     
     const removeProductFromCart = async () =>{
@@ -108,18 +113,18 @@ const ProductHero : React.FC<CategoriesAndProductsProps> = ({product}) => {
                         <div className="flex flex-col w-full gap-[8px] mt-[16px]">
                             <span>Quantity</span>
                             <div className="w-full h-[48px] bg-white border border-[#F3F3F3] flex items-center justify-between px-[16px]">
-                                <div className="h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}} className="cursor-pointer"><path d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/></svg>
+                                <div className={`h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3] ${!selectedOption || (cartEntry && cartEntry?.quantity < 2) ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={()=>selectedOption && (cartEntry && cartEntry.quantity > 1) && addProductToCart(cartEntry.quantity - 1)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}}><path d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/></svg>
                                 </div>
-                                <span className="font-bold">3</span>
-                                <div className="h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}} className="cursor-pointer"><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>
+                                <span className="font-bold">{ cartEntry ? cartEntry.quantity : 0 }</span>
+                                <div className={`h-[32px] w-[32px] flex items-center justify-center rounded-full border border-[#F3F3F3] ${!selectedOption || (cartEntry && cartEntry?.quantity == selectedOption?.stock) ? 'cursor-not-allowed' : 'cursor-pointer'}`} onClick={()=> selectedOption && (cartEntry && cartEntry?.quantity <= selectedOption?.stock) && addProductToCart(cartEntry ? (cartEntry.quantity + 1) : 1)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ fontSize: '12px', height: '20px'}}><path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/></svg>
                                 </div>
                             </div>
                         </div>
                         <div className={`w-full flex flex-col items-center justify-center py-[16px] gap-[12px] ${selectedOption ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}>
                             {cartEntry ? <div className={`gap-[8px] w-full h-[48px] bg-red-900 text-white flex items-center justify-center ${selectedOption ? 'transition-transform duration-200 hover:scale-[0.95]' : 'opacity-50 cursor-not-allowed'}`} onClick={()=>removeProductFromCart()}>REMOVE FROM CART</div> : ''}
-                            {!cartEntry ? <div className={`gap-[8px] w-full h-[48px] bg-[#141511] text-white flex items-center justify-center ${selectedOption ? 'transition-transform duration-200 hover:scale-[0.95]' : 'opacity-50 cursor-not-allowed'}`} onClick={()=>addProductToCart()}>
+                            {!cartEntry ? <div className={`gap-[8px] w-full h-[48px] bg-[#141511] text-white flex items-center justify-center ${selectedOption ? 'transition-transform duration-200 hover:scale-[0.95]' : 'opacity-50 cursor-not-allowed'}`} onClick={()=>addProductToCart(1)}>
                                 <img src="/images/plus.svg"/> 
                                 ADD TO CART
                             </div> : ''}

@@ -116,7 +116,8 @@ const app = createSlice({
       state.loggedInUser = action.payload;
     },
     addToCart: (state, action: PayloadAction<CartItem>) => {
-      state.cart = [...state.cart, action.payload];
+      const previousCartItemsAtOtherIndexes = state.cart.filter((item)=> item.key !== action.payload.key);
+      state.cart = [...previousCartItemsAtOtherIndexes, action.payload];
       utils.createSuccessNotification(`Added ${action.payload.product.name} to cart`, 3000);
     },
     updateCart: (state, action: PayloadAction<CartItem[]>) => {

@@ -1,11 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Product } from "../../utils/utils";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { addToWishlist, removeFromWishlist } from "../../redux/states/app";
-
 interface CategoriesAndProductsProps {
     product: Product;
 }
@@ -29,9 +24,6 @@ const CategoriesAndProductsProduct: React.FC<CategoriesAndProductsProps>= ({prod
     const [hovered, setHovered] = useState<boolean>(false);
     const [activeImage, setActiveImage] = useState<string>(allImages[0]);
     const showImage = hovered ? activeImage : allImages[0];
-    const { wishlist } = useSelector((state: RootState) => state.app);
-    const isInWishlist = wishlist.some((item) => item.id === product.id);
-    const dispatch = useDispatch();
     useEffect(() => {
         if (hovered) {
             const intervalId = setInterval(() => {

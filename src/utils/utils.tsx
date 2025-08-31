@@ -254,11 +254,15 @@ export async function apiRequest(
       method,
       url: baseurl + endpoint,
       data: body,
-      // withCredentials: true,
     };
-
+    const userToken = localStorage.getItem('userToken');
+    if (userToken) {
+      config.headers = {
+        ...config.headers,
+        'Authorization': `Bearer ${userToken}`
+      };
+    }
     const res = await axios(config);
-
     return {
       data: res.data,
       status: res.status,
