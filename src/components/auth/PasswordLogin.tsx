@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { setAuthPage, setLoginValues } from "../../redux/states/auth";
+import { setAuthPage, setLoginValues, setSignupValues } from "../../redux/states/auth";
 import { setLoggedInUser } from "../../redux/states/app";
 import { useSelector } from "react-redux";
 import { apiRequest } from "../../utils/utils";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const PasswordLogin = () => {
     const [loading, setLoading] = useState(false);
-    const { loginValues } = useSelector((state: RootState) => state.auth);
+    const { loginValues, signupValues } = useSelector((state: RootState) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -29,6 +29,12 @@ const PasswordLogin = () => {
         const response = await apiRequest("users/login", 'POST', { identifier: loginValues.identifier, password: loginValues.password });
         setLoading(false);
         if(response.status !== 200){
+            if(response.status === 409){
+                console.log(response.data);
+                dispatch(setSignupValues({ ...signupValues, email: response.data.email }));
+                dispatch(setAuthPage("verify-email"));
+                return
+            }
             setErrorMessage(response.data.message || "An error occurred while logging in. Please try again.");
             setLoginValues({ identifier: '', password: '' });
             return
