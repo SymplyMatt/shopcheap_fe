@@ -3,42 +3,43 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { setAuthPage, setLoginValues } from "../../redux/states/auth";
 import { setLoggedInUser } from "../../redux/states/app";
 import { useSelector } from "react-redux";
-import utils, { apiRequest } from "../../utils/utils";
+import { apiRequest } from "../../utils/utils";
 import { useEffect, useState } from "react";
-import Loader from "../common/Loader";
 
 const PasswordLogin = () => {
     const [loading, setLoading] = useState(false);
     const { loginValues } = useSelector((state: RootState) => state.auth);
     const [showPassword, setShowPassword] = useState(false);
     const [disabled, setDisabled] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const handleBack = () => {
         dispatch(setAuthPage("emaillogin"));
     }
     const loginUser = async () => {
         setLoading(true);
-        const response = await apiRequest("jwt-auth/v1/token", {method: "POST", body: { username: loginValues.email, password: loginValues.password }, baseurl:'https://newshop.tn/wp-json/'});
+        setErrorMessage('');
+        const response = await apiRequest("users/login", 'POST', { identifier: loginValues.email, password: loginValues.password });
         setLoading(false);
-        if(!response.data && response.response) {
-            utils.createErrorNotification(response.response.data.message || "An error occurred while logging in. Please try again.", 3000);
-            setLoginValues({email: '', password: ''});
-            dispatch(setAuthPage(null));
+        if(response.status !== 200){
+            setErrorMessage(response.data.message || "An error occurred while logging in. Please try again.");
+            setLoginValues({ email: '', password: '' });
             return
         };
-        const {user_display_name, user_email, token, user_nicename} = response.data;
-        dispatch(setLoggedInUser({name: user_display_name, email: user_email, token, displayName: user_nicename}));
-        localStorage.setItem("userToken", token);
-        localStorage.setItem("user", JSON.stringify({name: user_display_name, email: user_email, displayName: user_nicename}));
+        if(!response.data.user || !response.data.accessToken){
+            setErrorMessage("Invalid response from server. Please try again.");
+            setLoginValues({ email: '', password: '' });
+            return
+        }
+        dispatch(setLoggedInUser({ ...response.data.user, token: response.data.accessToken }));
+        localStorage.setItem("userToken", response.data.accessToken);
+        localStorage.setItem("user", JSON.stringify({ ...response.data.user, token: response.data.accessToken }));
         setLoginValues({email: '', password: ''});
         dispatch(setAuthPage(null));
     }
     useEffect(() => {
-        setDisabled(loginValues.password.length < 8);
-    }, [loginValues.password]);
-    if(loading){
-        return <Loader />
-    }
+        setDisabled((loginValues.password.length < 8) || loading);
+    }, [loginValues.password, loading]);
     return (
       <div className="w-[500px] h-full bg-white border border-[#D6D6D5] pb-[40px] tmd:p-[38px] flex flex-col items-center h_content overflow-y-scroll login">
             <img src="/images/cancelx.svg" className="self-end cursor-pointer hidden tmd:block" onClick={() => dispatch(setAuthPage(null))}/>
@@ -67,7 +68,8 @@ const PasswordLogin = () => {
                     </div>
                     <div className="w-full flex flex-col justify-center gap-[12px]">
                         <label className="text-[#141511] font-semibold">Password</label>
-                        <input type={showPassword ? 'text' : "password"} className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="" value={loginValues.password} onChange={(e)=>dispatch(setLoginValues({...loginValues, password:e.currentTarget.value}))}/>
+                        <input type={showPassword ? 'text' : "password"} className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="" value={loginValues.password} onChange={(e)=>dispatch(setLoginValues({ ...loginValues, password:e.currentTarget.value }))}/>
+                        {errorMessage ? <div className="text-[#AA2924] text-[14px]">{ errorMessage }</div> : ''}
                         <div className="w-full flex justify-between items-center">
                             <div className="text-[#141511] text-[16px] font-normal flex items-center gap-[8px] underline cursor-pointer" onClick={()=> setShowPassword(!showPassword)}>
                                 {!showPassword ? <img src="/images/eyepassword.svg" className="cursor-pointer"/> : ''}

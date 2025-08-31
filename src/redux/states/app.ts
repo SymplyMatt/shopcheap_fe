@@ -1,12 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import utils, { ArrivalsAndCategory, CartItem, Category, Product, SavedCartItem } from "../../utils/utils";
-interface User {
-  name: string;
+export interface User {
+  id: string;
+  firstname: string;
+  lastname: string;
   email: string;
-  displayName: string;
+  phone: string;
+  whatsapp: string;
+  locationId: string;
+  username: string;
+  verified: boolean;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  location: any | null;
+  notifications: any[];
+  deliveryAddresses: any[];
   token: string;
 }
-
 interface AppState {
   theme: "light" | "dark";
   language: string;
@@ -14,6 +26,7 @@ interface AppState {
   showAccount: boolean;
   hasLoadedCart: boolean;
   showLogout: boolean;
+  loading: boolean;
   loggedInUser: User | null;
   cart: CartItem[];
   savedcart: SavedCartItem[];
@@ -25,7 +38,7 @@ interface AppState {
   currentPage: number;
   categories: Category[];
   newArrivals: ArrivalsAndCategory[];
-  userAddress: any
+  userAddress: any;
 }
 
 const initialState: AppState = {
@@ -34,6 +47,7 @@ const initialState: AppState = {
   showAccount: false,
   hasLoadedCart: false,
   showLogout: false,
+  loading: false,
   language: import.meta.env.VITE_LANGUAGE || "us",
   loggedInUser: null,
   cart: [],
@@ -73,6 +87,9 @@ const app = createSlice({
     },
     setHasLoadedCart: (state, action: PayloadAction<boolean>) => {
       state.hasLoadedCart = action.payload;
+    },
+    toggleLoading: (state) => {
+      state.loading = !state.loading;
     },
     setShowLogout: (state, action: PayloadAction<boolean>) => {
       state.showLogout = action.payload;
@@ -124,5 +141,5 @@ const app = createSlice({
   },
 });
 
-export const { setTheme, setLanguage, setLoggedInUser, setSearchMode, emptyCart, setShowAccount, setProducts, setSales, setCategories, setNewArrivals, addToCart, addToWishlist, removeFromCart, removeFromWishlist, setTotalProducts, setTotalPages, setCurrentPage, updateSavedCart, updateCart, setHasLoadedCart, setShowLogout, setUserAddress } = app.actions;
+export const { setTheme, setLanguage, setLoggedInUser, setSearchMode, emptyCart, setShowAccount, setProducts, setSales, setCategories, setNewArrivals, addToCart, addToWishlist, removeFromCart, removeFromWishlist, setTotalProducts, setTotalPages, setCurrentPage, updateSavedCart, updateCart, setHasLoadedCart, setShowLogout, setUserAddress, toggleLoading } = app.actions;
 export default app.reducer;

@@ -19,7 +19,7 @@ interface LayoutProps {
 const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps) => {
     const dispatch = useDispatch();
     const { authPage } = useSelector((state: RootState) => state.auth);
-    const { searchMode, showAccount, products, showLogout } = useSelector((state: RootState) => state.app);
+    const { searchMode, showAccount, products, showLogout, loading } = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,7 +65,7 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
         fetchData();
     }, []);
 
-    if (products?.length === 0 || !products) {
+    if (products?.length === 0 || !products || loading) {
         return (
             <Loader />
         );
