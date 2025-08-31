@@ -8,7 +8,7 @@ interface SignupValues {
 }
 
 interface LoginValues {
-  email: string;
+  identifier: string;
   password: string;
 }
 
@@ -20,7 +20,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   signupValues: { email: "", password: "", first_name: "", phone: "" },
-  loginValues: { email: "", password: "" },
+  loginValues: { identifier: "", password: "" },
   authPage: null,
 };
 

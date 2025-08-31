@@ -14,27 +14,34 @@ const PasswordLogin = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const handleBack = () => {
-        dispatch(setAuthPage("emaillogin"));
+        const isValidEmail = (email: string) => {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        };
+        if(isValidEmail(loginValues.identifier)){
+            dispatch(setAuthPage("emaillogin"));
+        }else{
+            dispatch(setAuthPage("phonelogin"));
+        }
     }
     const loginUser = async () => {
         setLoading(true);
         setErrorMessage('');
-        const response = await apiRequest("users/login", 'POST', { identifier: loginValues.email, password: loginValues.password });
+        const response = await apiRequest("users/login", 'POST', { identifier: loginValues.identifier, password: loginValues.password });
         setLoading(false);
         if(response.status !== 200){
             setErrorMessage(response.data.message || "An error occurred while logging in. Please try again.");
-            setLoginValues({ email: '', password: '' });
+            setLoginValues({ identifier: '', password: '' });
             return
         };
         if(!response.data.user || !response.data.accessToken){
             setErrorMessage("Invalid response from server. Please try again.");
-            setLoginValues({ email: '', password: '' });
+            setLoginValues({ identifier: '', password: '' });
             return
         }
         dispatch(setLoggedInUser({ ...response.data.user, token: response.data.accessToken }));
         localStorage.setItem("userToken", response.data.accessToken);
         localStorage.setItem("user", JSON.stringify({ ...response.data.user, token: response.data.accessToken }));
-        setLoginValues({email: '', password: ''});
+        setLoginValues({identifier: '', password: ''});
         dispatch(setAuthPage(null));
     }
     useEffect(() => {
@@ -57,11 +64,8 @@ const PasswordLogin = () => {
                         <div className="text-center text-[28px] font-medium leading-[130%] tracking-[0%] text-[#141511]">Sign in</div>
                         <div className="text-center text-[16px] font-normal leading-[130%] tracking-[0%] text-[#4F4F4D]">Enter your password to continue</div>
                         <div className="flex justify-between gap-[12px] items-center text-center text-[16px] font-normal leading-[130%] tracking-[0%] text-[#4F4F4D] font-semibold">
-                            {loginValues.email}   
-                            <span className="underline cursor-pointer font-normal"
-                            onClick={() => {
-                                dispatch(setAuthPage("emaillogin"));
-                            }}>
+                            {loginValues.identifier}   
+                            <span className="underline cursor-pointer font-normal" onClick={() => handleBack()}>
                                 Edit
                             </span>
                         </div>

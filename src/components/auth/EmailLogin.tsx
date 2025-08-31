@@ -15,8 +15,8 @@ const EmailLogin = () => {
         const isValidEmail = (email: string) => {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         };
-        setDisabled(!isValidEmail(loginValues.email));
-      }, [loginValues.email]);
+        setDisabled(!isValidEmail(loginValues.identifier));
+      }, [loginValues.identifier]);
     return (
         <div className="w-[500px] h-full bg-white border border-[#D6D6D5] pb-[40px] tmd:p-[38px] flex flex-col items-center h_content overflow-y-scroll login">
             <img src="/images/cancelx.svg" className="self-end cursor-pointer hidden tmd:block" onClick={() => handleBack()}/>
@@ -37,7 +37,7 @@ const EmailLogin = () => {
                     </div>
                     <div className="w-full flex flex-col justify-center gap-[12px]">
                         <label className="text-[#141511] font-semibold">Email</label>
-                        <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="mail@gmail.com" value={loginValues.email} onChange={(e)=>dispatch(setLoginValues({ ...loginValues, email:e.currentTarget.value }))}/>
+                        <input type="text" className="bg-[#F3F3F3] outline-none border-none p-[8px] px-[12px] w-full h-[48px]" placeholder="mail@gmail.com" value={loginValues.identifier} onChange={(e)=>dispatch(setLoginValues({ ...loginValues, identifier:e.currentTarget.value }))}/>
                         <div className="w-full flex justify-between items-center">
                             <div className="text-[#141511] text-[16px] font-normal flex items-center gap-[8px]"><img src="/images/checkboxchecked.svg" className="cursor-pointer"/>Keep me signed in</div>
                             <div className="uppercase text-[#141511] text-[12px] underline font-semibold cursor-pointer" onClick={() => dispatch(setAuthPage('create-account'))}>Create an account</div>
@@ -46,6 +46,7 @@ const EmailLogin = () => {
                     <div className={`flex h-[48px] bg-[#141511] w-full cursor-pointer text-white items-center justify-center ${!disabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`} onClick={() => !disabled && dispatch(setAuthPage('passwordlogin'))}>NEXT</div>
                     <div className="flex h-[48px] text-[#141511] w-full cursor-pointer bg-white items-center justify-center border border-[#D6D6D5] font-semibold"
                         onClick={() => {
+                            dispatch(setLoginValues({ ...loginValues, identifier: "" }));
                             dispatch(setAuthPage("phonelogin"));
                         }}>USE PHONE NUMBER INSTEAD
                     </div>
