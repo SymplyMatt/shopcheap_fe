@@ -4,7 +4,7 @@ import Footer from "../components/common/Footer";
 import Auth from "../components/common/Auth";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
-import Search from "../components/common/Search";
+// import Search from "../components/common/Search";
 import MobileFooter from "../components/common/MobileFooter";
 import AccountMobile from "../components/common/AccountMobile";
 import { apiRequest, Response } from "../utils/utils";
@@ -82,7 +82,7 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
             </div>
             {authPage && <Auth />}
             {showAccount && <AccountMobile />}
-            {searchMode && <Search />}
+            {/* {searchMode && <Search />} */}
             <MobileFooter />
             <div className="flex flex-col absolute top-[100px] right-[10px] tmd:right-[30px] notification-container gap-20"></div>
             {showLogout && <Logout />}
