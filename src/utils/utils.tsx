@@ -243,7 +243,7 @@ function normalizeHeaders(
   );
 }
 
-const baseurl = 'http://localhost:1235/';
+const baseurl = 'https://grocery-errands.onrender.com/';
 export async function apiRequest(
   endpoint: string,
   method: Method = "GET",
