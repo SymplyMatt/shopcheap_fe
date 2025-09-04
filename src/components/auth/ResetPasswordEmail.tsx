@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { setAuthPage } from "../../redux/states/auth";
-import { setLoggedInUser } from "../../redux/states/app";
 
 const ResetPasswordEmail = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +30,7 @@ const ResetPasswordEmail = () => {
                 </div>
                 <div className="flex h-[48px] bg-[#141511] w-full cursor-pointer text-white items-center justify-center"
                     onClick={() => {
-                        dispatch(setLoggedInUser({name: "user_display_name", email: "user_email", token:"token", displayName: "user_nicename"}));
+                        // dispatch(setLoggedInUser({name: "user_display_name", email: "user_email", token:"token", displayName: "user_nicename"}));
                         dispatch(setAuthPage(null));
                     }}>RESET PASSWORD</div>
                 <div className="flex h-[48px] text-[#141511] w-full cursor-pointer bg-white items-center justify-center border border-[#D6D6D5] font-semibold"
