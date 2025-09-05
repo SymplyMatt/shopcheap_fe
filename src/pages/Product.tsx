@@ -36,15 +36,15 @@ const Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const fetchedProduct = (await apiRequest(`products`));
-        const products = fetchedProduct.data;
-        setUpsells(products.results);
+        const relatedProducts = (await apiRequest(`products/${product?.id}/related?limit=10`)).data;
+        setUpsells(relatedProducts.products.results);
       } catch (err) {
         console.error("Error fetching product:", err);
       }
     };
-    fetchProduct();
+    if (product && product.id) fetchProduct();
   }, [product]);
+
   useEffect(()=>{
     setProduct(productFromRoute || null);
   },[id])
