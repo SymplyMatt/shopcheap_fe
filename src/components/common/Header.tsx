@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import MenuLinks from "./MenuLinks";
 import { useLocation, useNavigate } from "react-router-dom";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
-import { setSearchMode } from "../../redux/states/app";
-import Languages from "./Languages";
-import Currencies from "./Currencies";
 import UserInfo from "./UserInfo";
+import MenuLinks from "./MenuLinks";
 
 const Header = () => {
     const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
     const navigate = useNavigate();
     const location = useLocation();
-    const dispatch = useDispatch<AppDispatch>();
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [location.pathname]);
@@ -60,7 +54,7 @@ const Header = () => {
                         ))}
                 </div> : ''}
             </div>
-            {/* <MenuLinks hoveredMenu={hoveredMenu} setHoveredMenu={setHoveredMenu}/> */}
+            <MenuLinks hoveredMenu={hoveredMenu} setHoveredMenu={setHoveredMenu}/>
         </>
     )
 }

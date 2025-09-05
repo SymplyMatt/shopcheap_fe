@@ -1,9 +1,6 @@
 import { Product } from "../../utils/utils";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../redux/store";
-import { useDispatch } from "react-redux";
 
 interface CategoriesAndProductsProps {
     product: Product;
@@ -29,7 +26,6 @@ const UpsellSliderProduct: React.FC<CategoriesAndProductsProps> =({product}) => 
     const [hovered, setHovered] = useState<boolean>(false);
     const [activeImage, setActiveImage] = useState<string>(allImages[0]);
     const showImage = hovered ? activeImage : allImages[0];
-    const { wishlist } = useSelector((state: RootState) => state.app);
     useEffect(() => {
         if (hovered) {
             const intervalId = setInterval(() => {
