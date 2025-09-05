@@ -12,13 +12,6 @@ const Header = () => {
     const menu = searchParams.get("menu");
     const sublink = searchParams.get("sublink");
     const navigate = useNavigate();
-    const handleMenuClick = (category: string) => {
-        const params = new URLSearchParams(searchParams);
-        params.set("sublink", category);
-        params.set("type", "subcategory");
-        navigate(`/search/allresults?${params.toString()}`);
-    };
-    
     return (
         <div className="w-full flex flex-col gap-[24px] justify-center">
             <div className="hidden tmd:flex px-[50px] pt-[20px] flex-col gap-[20px]">
@@ -49,7 +42,7 @@ const Header = () => {
                     </div>
                     <div className="h-[1px] bg-[#E6E6E6] w-full"></div>
                 </div>
-                {type === 'category' && <RoundCategoriesSlider handleClick={handleMenuClick}/>}
+                {type === 'category' && <RoundCategoriesSlider/>}
                 {type === 'subcategory' && <BrandsSlider />}
                 {type === 'all' &&<div className="w-full hidden tmd:flex items-center justify-center gap-[18px]">
                     <select className="cursor-pointer border border-[#959694] border-[0.7px] h-[40px] rounded-[38px] py-[8px] px-[16px] text-[#141511]">
