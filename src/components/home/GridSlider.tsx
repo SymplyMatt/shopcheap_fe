@@ -6,6 +6,7 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination } from "swiper/modules";
 import { useRef, useState } from "react";
 import { ArrivalsAndCategory } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 interface ComponentProp{
     categoriesAndProducts?: ArrivalsAndCategory[];
@@ -14,6 +15,7 @@ const GridSlider: React.FC<ComponentProp> = ({categoriesAndProducts=[]}) => {
     const swiperRef = useRef<SwiperClass | null>(null);
     const [slidesPerView, setSlidesPerView] = useState(4);
     const [activeIndex, setActiveIndex] = useState(0);
+    const navigate = useNavigate();
     const handlePrevClick = () => {
         if (swiperRef.current) {
             swiperRef.current.slidePrev();
@@ -84,7 +86,8 @@ const GridSlider: React.FC<ComponentProp> = ({categoriesAndProducts=[]}) => {
                                         className="w-[80%] h-[80%] object-contain"
                                         alt={`Arrival ${index + 1}`}
                                     />
-                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[48px] text-[#141511] bg-white py-[8px] px-[24px] flex justify-center items-center text-[16px] font-medium leading-[24.8px] tracking-[0%] cursor-pointer gap-[8px] opacity-0 scale-0 transition-all duration-50 group-hover:opacity-100 group-hover:scale-100 whitespace-nowrap">
+                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[48px] text-[#141511] bg-white py-[8px] px-[24px] flex justify-center items-center text-[16px] font-medium leading-[24.8px] tracking-[0%] cursor-pointer gap-[8px] opacity-0 scale-0 transition-all duration-50 group-hover:opacity-100 group-hover:scale-100 whitespace-nowrap" 
+                                        onClick={() => navigate(`/categories/${categoryAndProduct.category.id}`)}>
                                         View all <img src="/images/arrowdirection.svg" alt="Arrow" />
                                     </div>
                                 </div>

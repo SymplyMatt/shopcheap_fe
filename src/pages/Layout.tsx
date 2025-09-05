@@ -19,7 +19,7 @@ interface LayoutProps {
 const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps) => {
     const dispatch = useDispatch();
     const { authPage } = useSelector((state: RootState) => state.auth);
-    const { searchMode, showAccount, products, showLogout, loading } = useSelector((state: RootState) => state.app);
+    const { searchMode, showAccount, products, showLogout, loading, newArrivals, categories } = useSelector((state: RootState) => state.app);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,24 +45,24 @@ const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps)
                 console.error("Error in useEffect:", error);
             }
         };
-        fetchData();
+        !categories.length && fetchData();
     }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-            const res: Response = await apiRequest("categories/withproducts");
-            const categories = res.data.results;
-            const formatted = categories.map((category: any) => ({
-                category: category,
-                products: category.productCategories.map((pc: any) => pc.product)
-            }));
-            dispatch(setNewArrivals(formatted));
+                const res: Response = await apiRequest("categories/withproducts");
+                const categories = res.data.results;
+                const formatted = categories.map((category: any) => ({
+                    category: category,
+                    products: category.productCategories.map((pc: any) => pc.product)
+                }));
+                dispatch(setNewArrivals(formatted));
             } catch (error) {
                 console.error("Error in useEffect:", error);
             }
         };
-        fetchData();
+        !newArrivals.length && fetchData();
     }, []);
 
     if (products?.length === 0 || !products || loading) {
