@@ -92,31 +92,7 @@ const CheckoutSuccess = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-span-1 flex flex-col gap-[12px] p-[24px] border-l border-[#D6D6D5]">
-                            <div className="text-[#141511] text-[24px] font-medium">Shipping details</div>
-                            <div className="border boder-[#D6D6D5] flex flex-col h-[245px] p-[16px] gap-[24px] bg-[#F3F3F3]">
-                                <div className="text-[#676764] text-[18px] font-normal">BILLING ADDRESS</div>
-                                <div className="w-full flex-col gap-[8px]">
-                                    <div className="text-[141511]">Mahmud Richardson</div>
-                                    <div className="text-[#676764] text-[18px]">14 Crystal avenue, Easy-way, Tunisia, 23170</div>
-                                    <div className="text-[#676764] text-[18px]">Tunisia</div>
-                                </div>
-                            </div>
-                            <div className="w-full flex items-center gap-[32px]">
-                                <div className="flex flex-col gap-[8px]">
-                                    <div className="text-[#676764] text-[18px] font-normal">Card ending</div>
-                                    <div className="text-[#141511] text-[18px] font-medium flex items-center gap-[8px]"><img src="/images/visatext.svg" />3445</div>
-                                </div>
-                                <div className="flex flex-col gap-[8px]">
-                                    <div className="text-[#676764] text-[18px] font-normal">Expiration date</div>
-                                    <div className="text-[#141511] text-[18px] font-medium">08/2026</div>
-                                </div>
-                                <div className="flex flex-col gap-[8px]">
-                                    <div className="text-[#676764] text-[18px] font-normal">Payment type</div>
-                                    <div className="text-[#141511] text-[18px] font-medium">Debit/Credit Card</div>
-                                </div>
-                            </div>
-                        </div>
+                        <div className=""></div>
                     </div>
                     <div className="w-full flex items-center justify-between mt-[16px]">
                         <div className="border border-[#D6D6D5] cursor-pointer text-[#141511] font-semibold h-[40px] px-[24px] flex items-center justify-center w_content h-[48px] uppercase">Continue shopping</div>
