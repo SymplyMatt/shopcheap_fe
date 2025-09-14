@@ -1,5 +1,5 @@
 import UpsellSlider from '../product/UpsellSlider'
-import homeimageone from '../../assets/images/homeimageone.png';
+import homeimageone from '../../assets/images/homeimageone.jpg';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 
