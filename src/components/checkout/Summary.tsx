@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import utils, { apiRequest } from "../../utils/utils";
 
 const Summary = () => {
     const navigate = useNavigate();
@@ -11,7 +12,6 @@ const Summary = () => {
     const { cart } = useSelector((state: RootState) => state.app);
     const totalPrice = cart.reduce((acc, item) => acc + (item.quantity * item.product.productOptions[0].price), 0);
     const { deliveryInformation } = useSelector((state: RootState) => state.checkout);
-    const dispatch = useDispatch<AppDispatch>();
     const [disabled, setDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     useEffect(()=>{
@@ -20,9 +20,33 @@ const Summary = () => {
         };
         const validemail = isValidEmail(deliveryInformation.email);
         setDisabled(!validemail || !deliveryInformation.firstname || !deliveryInformation.lastname || deliveryInformation.phone.length !== 10 || deliveryInformation.address.length < 7 || !deliveryInformation.state || loading);
-    },[deliveryInformation]);
-    const submit = () =>{
+    },[deliveryInformation, loading]);
+    const submit = async () =>{
         setLoading(true);
+        try {
+            const body = {
+                ...deliveryInformation,
+                phone: "234" + deliveryInformation.phone,
+                "products": cart.map(i=>{
+                    return {
+                        productId: i.product.id,
+                        productOptionId: i.product.productOptions[0].id,
+                        quantity: i.quantity
+                    }
+                })
+            }
+            const response = await apiRequest("orders", 'POST', body);
+            setLoading(false);
+            if(response.status === 201 && response.data.order && response.data.order.payments?.[0]){
+                const checkoutUrl = response.data.order.payments?.[0].link;
+                window.location.replace(checkoutUrl);
+            }else{
+                
+            }
+        } catch (error) {
+            setLoading(false);
+            utils.createErrorNotification("Error creating order", 1000);
+        }
     };
     return (
         <div className={`w-full col-span-1 flex-col border-b border-[#D6D6D5] justify-between ${cart.length === 0 ? 'hidden tmd:flex' : ''}`}>
@@ -51,7 +75,7 @@ const Summary = () => {
                     {page !== 'payment' ? <>
                         <div className={`flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px] ${!disabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`} 
                             onClick={()=>{
-                                navigate(`/checkout/delivery`);
+                                submit();
                             }}>
                             CHECKOUT
                         </div>
