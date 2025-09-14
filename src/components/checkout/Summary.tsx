@@ -35,7 +35,7 @@ const Summary = () => {
                     {page !== 'payment' ? <>
                         <div className="flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px]" 
                             onClick={()=>{
-                                navigate(`/checkout/success`);
+                                navigate(`/checkout/delivery`);
                             }}>
                             CHECKOUT
                         </div>
