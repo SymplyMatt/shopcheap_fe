@@ -1,13 +1,29 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductList from "./ProductList";
-import { RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Summary = () => {
     const navigate = useNavigate();
     const page = useLocation().pathname.split("/").pop();
     const { cart } = useSelector((state: RootState) => state.app);
     const totalPrice = cart.reduce((acc, item) => acc + (item.quantity * item.product.productOptions[0].price), 0);
+    const { deliveryInformation } = useSelector((state: RootState) => state.checkout);
+    const dispatch = useDispatch<AppDispatch>();
+    const [disabled, setDisabled] = useState(true);
+    const [loading, setLoading] = useState(false);
+    useEffect(()=>{
+        const isValidEmail = (email: string) => {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        };
+        const validemail = isValidEmail(deliveryInformation.email);
+        setDisabled(!validemail || !deliveryInformation.firstname || !deliveryInformation.lastname || deliveryInformation.phone.length !== 10 || deliveryInformation.address.length < 7 || !deliveryInformation.state || loading);
+    },[deliveryInformation]);
+    const submit = () =>{
+        setLoading(true);
+    };
     return (
         <div className={`w-full col-span-1 flex-col border-b border-[#D6D6D5] justify-between ${cart.length === 0 ? 'hidden tmd:flex' : ''}`}>
             <div className="w-full flex flex-col">
@@ -33,7 +49,7 @@ const Summary = () => {
                     </div>
                     <div className="w-full h-[1px] bg-[#D6D6D5] mt-[12px]"></div>
                     {page !== 'payment' ? <>
-                        <div className="flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px]" 
+                        <div className={`flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px] ${!disabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`} 
                             onClick={()=>{
                                 navigate(`/checkout/delivery`);
                             }}>

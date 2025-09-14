@@ -1,40 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Product } from "../../utils/utils";
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
 interface CheckoutState {
-  cart: CartItem[];
+  deliveryInformation: DeliveryInformation;
 }
-
+interface DeliveryInformation {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  state: string;
+  address: string;
+}
 const initialState: CheckoutState = {
-  cart: [],
+  deliveryInformation: { email: "", state: "", firstname: "", lastname: "", phone: "", address: "" }
 };
 
 const checkout = createSlice({
   name: "checkout",
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<CartItem>) => {
-      state.cart.push(action.payload);
-    },
-    removeFromCart: (state, action: PayloadAction<CartItem>) => {
-      state.cart = state.cart.filter(item => item.product.id !== action.payload.product.id);
-    },
-    updateCartQuantity: (state, action: PayloadAction<CartItem>) => {
-      const item = state.cart.find(item => item.product.id === action.payload.product.id);
-      if (item) {
-        item.quantity = action.payload.quantity;
-      }
-    },
-    clearCart: (state) => {
-      state.cart = [];
+    setDeliveryInformation: (state, action: PayloadAction<DeliveryInformation>) => {
+      state.deliveryInformation = action.payload;
     },
   },
 });
 
-export const { addToCart, removeFromCart, updateCartQuantity, clearCart } = checkout.actions;
+export const { setDeliveryInformation } = checkout.actions;
 export default checkout.reducer;
