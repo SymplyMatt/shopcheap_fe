@@ -243,7 +243,7 @@ function normalizeHeaders(
   );
 }
 
-const baseurl = 'http://localhost:1235/';
+const baseurl = 'https://grocery-errands.onrender.com/';
 export async function apiRequest(
   endpoint: string,
   method: Method = "GET",
@@ -397,6 +397,46 @@ export interface SavedCartItem {
   total: number;
   quantity: number;
 }
+interface OrderProduct {
+  _id: string;
+  product: Product;
+  productOption: ProductOption;
+  quantity: number;
+  price: number;
+}
+
+export interface Payment {
+  _id: string;
+  status: string;
+  amount: number;
+  link: string;
+}
+
+export interface OrderUser {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+}
+
+export interface Order {
+  id: string;
+  status: string;
+  address: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  phone: string;
+  state: string;
+  total: number;
+  delivery: number;
+  createdAt: Date;
+  user: OrderUser;
+  orderProducts: OrderProduct[];
+  payments: Payment[];
+}
+
 export const nigerianStates = [
   "Abia",
   "Adamawa",

@@ -1,9 +1,33 @@
 import { useEffect, useState } from "react";
+import { Order as OrderInterface } from "../../utils/utils"
 
 type MenuLinksProps = {
     index: number;
+    order: OrderInterface
 };
-const Order: React.FC<MenuLinksProps> = ({index}) => {
+
+function formatDate(date: Date): string {
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) {
+    throw new Error('Invalid date provided');
+  }
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  const day = dateObj.getDate();
+  const month = months[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+  let hours = dateObj.getHours();
+  const minutes = dateObj.getMinutes();
+
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  const minutesStr = minutes.toString().padStart(2, '0');
+  return `${day} ${month} ${year}, ${hours}:${minutesStr} ${ampm}`;
+}
+const Order: React.FC<MenuLinksProps> = ({order,index}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOrderDetails = () => {
       setIsOpen(!isOpen);
@@ -16,21 +40,17 @@ const Order: React.FC<MenuLinksProps> = ({index}) => {
             <div className="w-full p-[20px] border border-[#D6D6D5] flex flex-col justify-between gap-[20px]">
                 <div className="w-full flex items-center justify-between">
                     <div className="flex flex-col text-left gap-[4px]">
-                        <div className="text-[#141511] text-[18px] leading-[150%] font-semibold">ID : #22908808FF0AD2</div>
-                        <div className="text-[#4F4F4D] text-[16px] leading-[130%]">Date : 20 Jan 2025, 12:30 pm</div>
+                        <div className="text-[#141511] text-[18px] leading-[150%] font-semibold">ID : #{order.id.toUpperCase().substring(0,14)}</div>
+                        <div className="text-[#4F4F4D] text-[16px] leading-[130%]">Date : { formatDate(order.createdAt)}</div>
                     </div>
                     <div className="hidden tmd:flex items-center justify-center gap-[32px]">
                         <div className="flex flex-col text-left gap-[4px]">
                             <div className="text-[#676764] text-[16px] leading-[130%]">Total products</div>
-                            <div className="text-[#141511] text-[18px] leading-[150%] font-medium">6 Products</div>
+                            <div className="text-[#141511] text-[18px] leading-[150%] font-medium">{order.orderProducts.length} Products</div>
                         </div>
                         <div className="flex flex-col text-left gap-[4px]">
                             <div className="text-[#676764] text-[16px] leading-[130%]">Total payment</div>
-                            <div className="text-[#141511] text-[18px] leading-[150%] font-medium">250.00 TND</div>
-                        </div>
-                        <div className="flex flex-col text-left gap-[4px]">
-                            <div className="text-[#676764] text-[16px] leading-[130%]">Payment type</div>
-                            <div className="text-[#141511] text-[18px] leading-[150%] font-medium">Credit/debit</div>
+                            <div className="text-[#141511] text-[18px] leading-[150%] font-medium">₦{order.total.toLocaleString()}</div>
                         </div>
                         <div className="flex flex-col text-left gap-[4px]">
                             <div className="text-[#676764] text-[16px] leading-[130%]">Status order</div>
@@ -42,15 +62,11 @@ const Order: React.FC<MenuLinksProps> = ({index}) => {
                 <div className="grid grid-cols-1 tmd:hidden justify-center gap-[8px]">
                     <div className="flex gap-[4px] col-span-1 justify-between items-center">
                         <div className="text-[#676764] text-[14px] leading-[130%]">Total products</div>
-                        <div className="text-[#141511] text-[14px] leading-[150%] font-medium">6 Products</div>
+                        <div className="text-[#141511] text-[14px] leading-[150%] font-medium">{order.orderProducts.length}</div>
                     </div>
                     <div className="flex gap-[4px] col-span-1 justify-between items-center">
                         <div className="text-[#676764] text-[14px] leading-[130%]">Total payment</div>
-                        <div className="text-[#141511] text-[14px] leading-[150%] font-medium">250.00 TND</div>
-                    </div>
-                    <div className="flex gap-[4px] col-span-1 justify-between items-center">
-                        <div className="text-[#676764] text-[14px] leading-[130%]">Payment type</div>
-                        <div className="text-[#141511] text-[14px] leading-[150%] font-medium">Credit/debit</div>
+                        <div className="text-[#141511] text-[14px] leading-[150%] font-medium">₦{order.total.toLocaleString()}</div>
                     </div>
                     <div className="flex gap-[4px] col-span-1 justify-between items-center">
                         <div className="text-[#676764] text-[14px] leading-[130%]">Status order</div>
@@ -61,260 +77,54 @@ const Order: React.FC<MenuLinksProps> = ({index}) => {
             <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[9999px]' : 'max-h-0'}`}>
                 <div className="w-full p-[10px] tmd:p-[20px] border-r border-l border-b border-[#D6D6D5] flex justify-center bg-[#F3F3F3] transition-all duration-300 ease-in-out">
                     <div className="w-full bg-white flex flex-col items-center">
-                        <div className="w-full flex border-b border-[#D6D6D5] justify-center py-[20px] tmd:p-[20px]" style={{height: 'fit-content'}}>
-                            <div className="flex flex-col gap-[12px] text-[12px] tmd:text-base relative right-[-20px] tmd:right-[30px]">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative right-[7px]">
-                                    <rect x="8" y="2.99625" width="8.00333" height="4.00167" rx="1" stroke="#141511" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M16.0011 4.99707H18.0019C19.107 4.99707 20.0028 5.89287 20.0028 6.9979V19.0029C20.0028 20.1079 19.107 21.0037 18.0019 21.0037H5.99693C4.8919 21.0037 3.99609 20.1079 3.99609 19.0029V6.9979C3.99609 5.89287 4.8919 4.99707 5.99693 4.99707H7.99776" stroke="#141511" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M14.2355 12.8517L11.4443 15.6428L9.76562 13.9701" stroke="#141511" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div className="flex items-center">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g filter="url(#filter0_d_855_39068)">
-                                    <circle cx="7" cy="5" r="4" fill="#141511"/>
-                                    <circle cx="7" cy="5" r="4.5" stroke="white"/>
-                                    </g>
-                                    <defs>
-                                    <filter id="filter0_d_855_39068" x="0" y="0" width="14" height="14" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                                    <feOffset dy="2"/>
-                                    <feGaussianBlur stdDeviation="1"/>
-                                    <feComposite in2="hardAlpha" operator="out"/>
-                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_855_39068"/>
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_855_39068" result="shape"/>
-                                    </filter>
-                                    </defs>
-                                    </svg>
-                                    <svg viewBox="0 0 876 2" fill="none" xmlns="http://www.w3.org/2000/svg" className="tmd:w-full w-[65px]">
-                                    <path d="M0 1L876 1.00008" stroke="#141511" stroke-dasharray="6 4"/>
-                                    </svg>
-                                </div>
-                                <div className="relative right-[20px] tmd:right-[30px] text-[12px] tmd:text-base font-bold">Reviewing</div>
-                            </div>
-                            <div className="flex flex-col gap-[12px] text-[12px] tmd:text-base relative right-[-20px] tmd:right-[30px]">
-                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative right-[7px]">
-                                <path d="M12.3322 2.99625V7.99833" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M7.33203 17.0021H9.33286" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M21.3356 9.99915C21.3356 8.89413 20.4398 7.99832 19.3348 7.99832H5.32896C4.22393 7.99832 3.32812 8.89413 3.32812 9.99915" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.3348 21.0037H5.57906C4.33591 21.0037 3.32813 19.996 3.32813 18.7528V8.49854C3.32781 7.95823 3.43741 7.4235 3.65026 6.92688L4.74472 4.36282C5.09863 3.53379 5.91317 2.99601 6.81458 2.99625H17.8482C18.7496 2.99601 19.5641 3.53379 19.918 4.36282L21.0185 6.92688C21.2295 7.4239 21.3374 7.95859 21.3356 8.49854V19.0029C21.3356 20.1079 20.4398 21.0037 19.3348 21.0037Z" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div className="flex items-center">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g filter="url(#filter0_d_855_39068)">
-                                    <circle cx="7" cy="5" r="4" fill="#141511"/>
-                                    <circle cx="7" cy="5" r="4.5" stroke="white"/>
-                                    </g>
-                                    <defs>
-                                    <filter id="filter0_d_855_39068" x="0" y="0" width="14" height="14" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                                    <feOffset dy="2"/>
-                                    <feGaussianBlur stdDeviation="1"/>
-                                    <feComposite in2="hardAlpha" operator="out"/>
-                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_855_39068"/>
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_855_39068" result="shape"/>
-                                    </filter>
-                                    </defs>
-                                    </svg>
-                                    <svg viewBox="0 0 876 2" fill="none" xmlns="http://www.w3.org/2000/svg" className="tmd:w-full w-[65px]">
-                                    <path d="M0 1L876 1.00008" stroke="#141511" stroke-dasharray="6 4"/>
-                                    </svg>
-                                </div>
-                                <div className="relative right-[20px] tmd:right-[30px] text-[#4F4F4D] font-normal">Preparing</div>
-                            </div>
-                            <div className="flex flex-col gap-[12px] text-[12px] tmd:text-base relative right-[-20px] tmd:right-[30px]">
-                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative right-[7px]">
-                                <path d="M19.3722 18.296C19.9912 18.915 19.9912 19.918 19.3722 20.536C18.7532 21.155 17.7502 21.155 17.1322 20.536C16.5132 19.917 16.5132 18.914 17.1322 18.296C17.7512 17.677 18.7542 17.677 19.3722 18.296" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8.37184 18.296C8.99084 18.915 8.99084 19.918 8.37184 20.536C7.75284 21.155 6.74984 21.155 6.13184 20.536C5.51384 19.917 5.51284 18.914 6.13184 18.296C6.75084 17.678 7.75284 17.677 8.37184 18.296" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M10.668 4H14.668C15.22 4 15.668 4.448 15.668 5V15H2.66797" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M5.66797 19.416H3.66797C3.11597 19.416 2.66797 18.968 2.66797 18.416V13" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M15.668 7H19.991C20.4 7 20.768 7.249 20.919 7.629L22.525 11.643C22.619 11.879 22.668 12.131 22.668 12.385V18.333C22.668 18.885 22.22 19.333 21.668 19.333H19.837" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M16.6698 19.42H8.83984" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M22.668 14H18.668V10H21.868" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2.66797 4H7.66797" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2.66797 7H5.66797" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3.66797 10H2.66797" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div className="flex items-center">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g filter="url(#filter0_d_855_39068)">
-                                    <circle cx="7" cy="5" r="4" fill="#141511"/>
-                                    <circle cx="7" cy="5" r="4.5" stroke="white"/>
-                                    </g>
-                                    <defs>
-                                    <filter id="filter0_d_855_39068" x="0" y="0" width="14" height="14" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                                    <feOffset dy="2"/>
-                                    <feGaussianBlur stdDeviation="1"/>
-                                    <feComposite in2="hardAlpha" operator="out"/>
-                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_855_39068"/>
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_855_39068" result="shape"/>
-                                    </filter>
-                                    </defs>
-                                    </svg>
-                                    <svg viewBox="0 0 876 2" fill="none" xmlns="http://www.w3.org/2000/svg" className="tmd:w-full w-[65px]">
-                                    <path d="M0 1L876 1.00008" stroke="#141511" stroke-dasharray="6 4"/>
-                                    </svg>
-                                </div>
-                                <div className="relative right-[20px] tmd:right-[30px] text-[#4F4F4D] font-normal">Shipped</div>
-                            </div>
-                            <div className="flex flex-col gap-[12px] text-[12px] tmd:text-base relative right-[-20px] tmd:right-[30px]">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative right-[7px]">
-                                <path d="M9.99864 12L6.14453 17.8029" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3H15V5C15 5.55228 14.5523 6 14 6H10C9.44772 6 9 5.55228 9 5V3Z" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 15.108V19.2758C2.99999 19.7331 3.18164 20.1716 3.505 20.495C3.82835 20.8183 4.26692 21 4.72421 21H9.874" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 6V5C3 3.89543 3.89543 3 5 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H16.5913" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 15.108L10.1981 21.2777C10.7418 21.7438 11.4343 22 12.1504 22H15.4391C15.8919 22 16.3026 21.7342 16.4881 21.3211C16.6737 20.908 16.5995 20.4245 16.2986 20.086L14 17.5V16.5H16.0629C16.8566 16.5 17.5 15.8566 17.5 15.0629V15.0629C17.5 14.4085 17.058 13.8368 16.4248 13.672L10 12L3 6" stroke="#4F4F4D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                                <div className="flex items-center w-[14px]">
-                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g filter="url(#filter0_d_855_39068)">
-                                    <circle cx="7" cy="5" r="4" fill="#141511"/>
-                                    <circle cx="7" cy="5" r="4.5" stroke="white"/>
-                                    </g>
-                                    <defs>
-                                    <filter id="filter0_d_855_39068" x="0" y="0" width="14" height="14" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-                                    <feOffset dy="2"/>
-                                    <feGaussianBlur stdDeviation="1"/>
-                                    <feComposite in2="hardAlpha" operator="out"/>
-                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
-                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_855_39068"/>
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_855_39068" result="shape"/>
-                                    </filter>
-                                    </defs>
-                                    </svg>
-                                </div>
-                                <div className="relative right-[20px] tmd:right-[30px]">Delivered</div>
-                            </div>
-                        </div>
-                        <div className="h-full w-full grid grid-cols-1 tmd:grid-cols-2 border-b border-[#D6D6D5] gap-[30px] tmd:gap-[0px]">
-                            <div className="col-span-1 gap-[16px] flex flex-col p-[10px] tmd:p-[20px] border-b border-[#D6D6D5] tmd:border-none">
+                        <div className="h-full w-full grid grid-cols-1 tmd:grid-cols-2 border-b border-[#D6D6D5] gap-[30px] tmd:gap-[20px]">
+                            <div className="col-span-1 gap-[24px] flex flex-col p-[10px] tmd:p-[20px] border-b border-[#D6D6D5] tmd:border-none">
                                 <div className="text-[#141511] text-[16px] tmd:text-[20px] font-medium">Product details</div>
-                                <div className="w-full flex gap-[16px]">
-                                    <img src={`/images/payment-image1.svg`} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain" />
-                                    <div className="w-full flex flex-col h-full justify-between py-1">
-                                        <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">Ocean breeze varsity jacket</div>
-                                        <div className="text-[#141511] text-[14px] tmd:text-xl font-medium price mt-[12px]">120.00 TND</div>
-                                        <div className="w-full flex flex-col tmd:flex-row mt-[12px] tmd:gap-[12px]">
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Color: <span>Solid Blue</span></div>
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Category: <span>varsity jacket</span></div>
+                                {
+                                    order.orderProducts.map((product, index)=>(
+                                        <div className="w-full flex gap-[16px]" key={index}>
+                                            <img src={product.productOption.image} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain border border-[#F3F3F3]" style={{ width: '100px', height: '100px', objectFit: 'contain' }}/>
+                                            <div className="w-full flex flex-col gap-[4px]">
+                                                <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">{product.product.name}</div>
+                                                <div className="text-[#4F4F4D] text-[14px] tmd:text-md price mt-[12px]">Selected option: {product.productOption.name}</div>
+                                                <div className="text-[#4F4F4D] text-[14px] tmd:text-md price mt-[12px]">Unit price: ₦{product.price.toLocaleString()}</div>
+                                                <div className="text-[#4F4F4D] text-[14px] tmd:text-md price mt-[12px]">Quantiy: {product.quantity}</div>
+                                                <div className="text-[#4F4F4D] text-[14px] tmd:text-md price mt-[12px]">Total: ₦{(product.quantity * product.price).toLocaleString()}</div>
+                                            </div>
                                         </div>
-                                        <div className="w-full flex flex-col tmd:flex-row tmd:gap-[12px]">
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Size: <span>XL</span></div>
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Quantity: <span>1 Pcs</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex gap-[16px]">
-                                    <img src={`/images/payment-image1.svg`} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain" />
-                                    <div className="w-full flex flex-col h-full justify-between py-1">
-                                        <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">Ocean breeze varsity jacket</div>
-                                        <div className="text-[#141511] text-[14px] tmd:text-xl font-medium price mt-[12px]">120.00 TND</div>
-                                        <div className="w-full flex flex-col tmd:flex-row mt-[12px] tmd:gap-[12px]">
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Color: <span>Solid Blue</span></div>
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Category: <span>varsity jacket</span></div>
-                                        </div>
-                                        <div className="w-full flex flex-col tmd:flex-row tmd:gap-[12px]">
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Size: <span>XL</span></div>
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Quantity: <span>1 Pcs</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex gap-[16px]">
-                                    <img src={`/images/payment-image1.svg`} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain" />
-                                    <div className="w-full flex flex-col h-full justify-between py-1">
-                                        <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">Ocean breeze varsity jacket</div>
-                                        <div className="text-[#141511] text-[14px] tmd:text-xl font-medium price mt-[12px]">120.00 TND</div>
-                                        <div className="w-full flex flex-col tmd:flex-row mt-[12px] tmd:gap-[12px]">
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Color: <span>Solid Blue</span></div>
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Category: <span>varsity jacket</span></div>
-                                        </div>
-                                        <div className="w-full flex flex-col tmd:flex-row tmd:gap-[12px]">
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Size: <span>XL</span></div>
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Quantity: <span>1 Pcs</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex gap-[16px]">
-                                    <img src={`/images/payment-image1.svg`} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain" />
-                                    <div className="w-full flex flex-col h-full justify-between py-1">
-                                        <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">Ocean breeze varsity jacket</div>
-                                        <div className="text-[#141511] text-[14px] tmd:text-xl font-medium price mt-[12px]">120.00 TND</div>
-                                        <div className="w-full flex flex-col tmd:flex-row mt-[12px] tmd:gap-[12px]">
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Color: <span>Solid Blue</span></div>
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Category: <span>varsity jacket</span></div>
-                                        </div>
-                                        <div className="w-full flex flex-col tmd:flex-row tmd:gap-[12px]">
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Size: <span>XL</span></div>
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Quantity: <span>1 Pcs</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex gap-[16px]">
-                                    <img src={`/images/payment-image1.svg`} className="h-[100px] w-[100px] tmd:w-auto tmd:h-full object-contain" />
-                                    <div className="w-full flex flex-col h-full justify-between py-1">
-                                        <div className="text-[#141511] text-[14px] tmd:text-lg font-medium leading-[150%]">Ocean breeze varsity jacket</div>
-                                        <div className="text-[#141511] text-[14px] tmd:text-xl font-medium price mt-[12px]">120.00 TND</div>
-                                        <div className="w-full flex flex-col tmd:flex-row mt-[12px] tmd:gap-[12px]">
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Color: <span>Solid Blue</span></div>
-                                            <div className="col-span-6 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Category: <span>varsity jacket</span></div>
-                                        </div>
-                                        <div className="w-full flex flex-col tmd:flex-row tmd:gap-[12px]">
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%]">Size: <span>XL</span></div>
-                                            <div className="col-span-4 text-[#4F4F4D] text-base leading-[150%] tmd:w-[50%] tmd:flex text-left">Quantity: <span>1 Pcs</span></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                    ))
+                                }
                             </div>
                             <div className="w-full pb-[10px] px-[10px] tmd:p-[24px] flex flex-col gap-[12px] tmd:border-l border-[#D6D6D5]">
                                 <div className="text-[#141511] text-base tmd:text-[20px] font-medium">Summary</div>
                                 <div className="w-full flex items-center justify-between">
                                     <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[4px]">Total Products</div>
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">6 Products</div>
+                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">{order.orderProducts.length} Products</div>
                                 </div>
                                 <div className="w-full flex items-center justify-between">
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[4px]">Subtotal<img src="/images/question.svg" className="cursor-pointer" /></div>
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">754.50 TND</div>
-                                </div>
-                                <div className="w-full flex items-center justify-between">
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[8px]">Estimated shipping</div>
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">0.00 TND</div>
-                                </div>
-                                <div className="w-full flex items-center justify-between">
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[8px]">Estimated tax</div>
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">20.00 TND</div>
-                                </div>
-                                <div className="w-full flex items-center justify-between">
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[8px]">Discount <span className="text-[#E0523F] font-medium">10% OFF</span></div>
-                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">-75.45 TND</div>
+                                    <div className="text-[#4F4F4D] text-base tmd:text-[18px] flex items-center gap-[8px]">Delivery fee</div>
+                                    <div className="text-[#4F4F4D] text-base tmd:text-[20px] flex items-center gap-[8px]">₦{order.delivery}</div>
                                 </div>
                                 <div className="w-full flex items-center justify-between">
                                     <div className="text-[#141511] text-base tmd:text-[18px] flex items-center gap-[4px] font-semibold">Total payment </div>
-                                    <div className="text-[#4F4F4D] text-[20px] flex items-center gap-[8px] font-semibold">697.05 TND</div>
+                                    <div className="text-[#4F4F4D] text-[20px] flex items-center gap-[8px] font-semibold">₦{order.total.toLocaleString()}</div>
                                 </div>
                             </div>
                         </div>
                         <div className="w-full grid grid-cols-1 tmd:grid-cols-2 border-b border-[#D6D6D5]">
                             <div className="col-span-1 flex flex-col gap-[12px] p-[10px] tmd:p-[24px] border-b border-[#D6D6D5] tmd:border-none">
-                                    <div className="text-[#141511] text-[18px] tmd:text-[24px] font-medium">Shipping details</div>
+                                    <div className="text-[#141511] text-[18px] tmd:text-[24px] font-medium">Delivery details</div>
                                     <div className="border border-[#D6D6D5] flex flex-col tmd:h-[245px] p-[16px] gap-[24px] bg-[#F3F3F3]">
-                                        <div className="text-[#676764] text-[18px] font-normal">SHIPPING ADDRESS</div>
+                                        <div className="text-[#676764] text-[18px] font-normal">DELIVERY ADDRESS</div>
                                         <div className="w-full flex-col gap-[8px]">
-                                            <div className="text-[141511] text-[20px]">Mahmud Richardson</div>
-                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">14 Crystal avenue, Easy-way, Tunisia, 23170</div>
-                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">Tunisia</div>
-                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">richardson@gmail.com</div>
-                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">+231 658 - 845 - 0980</div>
+                                            <div className="text-[141511] text-[20px]">{order.firstname} {order.lastname}</div>
+                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">{order.address}</div>
+                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">{order.state}</div>
+                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">{order.email}</div>
+                                            <div className="text-[#676764] text-[16px] tmd:text-[18px]">+{order.phone}</div>
                                         </div>
                                     </div>
-                                    <div className="w-full flex tmd:flex-row flex-col tmd:items-center gap-[8px] tmd:gap-[32px]">
+                                    {/* <div className="w-full flex tmd:flex-row flex-col tmd:items-center gap-[8px] tmd:gap-[32px]">
                                         <div className="w-full justify-between tmd:justify-start flex tmd:flex-col gap-[8px]">
                                             <div className="text-[#676764] text-[18px] font-normal">Shipping type</div>
                                             <div className="text-[#141511] text-[18px] font-medium">Standard ( Free )</div>
@@ -323,35 +133,10 @@ const Order: React.FC<MenuLinksProps> = ({index}) => {
                                             <div className="text-[#676764] text-[18px] font-normal">Estimated arrive</div>
                                             <div className="text-[#141511] text-[18px] font-medium">25 January 2024</div>
                                         </div>
-                                    </div>
-                            </div>
-                            <div className="col-span-1 flex flex-col gap-[12px] p-[10px] tmd:p-[24px] tmd:border-l border-[#D6D6D5]">
-                                <div className="text-[#141511] text-[18px] tmd:text-[24px] font-medium">Shipping details</div>
-                                <div className="border boder-[#D6D6D5] flex flex-col tmd:h-[245px] p-[16px] gap-[24px] bg-[#F3F3F3]">
-                                    <div className="text-[#676764] text-[18px] font-normal">BILLING ADDRESS</div>
-                                    <div className="w-full flex-col gap-[8px]">
-                                        <div className="text-[141511] text-[20px]">Mahmud Richardson</div>
-                                        <div className="text-[#676764] text-[16px] tmd:text-[18px]">14 Crystal avenue, Easy-way, Tunisia, 23170</div>
-                                        <div className="text-[#676764] text-[16px] tmd:text-[18px]">Tunisia</div>
-                                    </div>
-                                </div>
-                                <div className="w-full flex tmd:flex-row flex-col tmd:items-center gap-[8px] tmd:gap-[32px]">
-                                    <div className="w-full justify-between tmd:justify-start flex tmd:flex-col gap-[8px]">
-                                        <div className="text-[#676764] text-[18px] font-normal">Card ending</div>
-                                        <div className="text-[#141511] text-[18px] font-medium flex items-center gap-[8px]"><img src="/images/visatext.svg" />3445</div>
-                                    </div>
-                                    <div className="w-full justify-between tmd:justify-start flex tmd:flex-col gap-[8px]">
-                                        <div className="text-[#676764] text-[18px] font-normal">Expiration date</div>
-                                        <div className="text-[#141511] text-[18px] font-medium">08/2026</div>
-                                    </div>
-                                    <div className="w-full justify-between tmd:justify-start flex tmd:flex-col gap-[8px]">
-                                        <div className="text-[#676764] text-[18px] font-normal">Payment type</div>
-                                        <div className="text-[#141511] text-[18px] font-medium">Debit/Credit Card</div>
-                                    </div>
-                                </div>
+                                    </div> */}
                             </div>
                         </div>
-                        <div className="w-full flex tmd:flex-row flex-col items-center p-[24px] justify-between gap-[20px] tmd:gap-[10px]">
+                        {/* <div className="w-full flex tmd:flex-row flex-col items-center p-[24px] justify-between gap-[20px] tmd:gap-[10px]">
                             <div className="flex gap-[8px] max-w-[600px] text-[#676764] text-[14px] tmd:text-base">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9.99787 6.66671C9.88287 6.66671 9.78953 6.76004 9.79037 6.87504C9.79037 6.99004 9.8837 7.08337 9.9987 7.08337C10.1137 7.08337 10.207 6.99004 10.207 6.87504C10.207 6.76004 10.1137 6.66671 9.99787 6.66671" stroke="#676764" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -361,7 +146,7 @@ const Order: React.FC<MenuLinksProps> = ({index}) => {
                                 Order cancellations can only be made during the Review stage. If you cancel at this point, your full payment will be refunded.
                             </div>
                             <div className="h-[48px] bg-[#BD3322] text-white cursor-pointer flex items-center justify-center py-[8px] px-[24px] w-full tmd:w-fit">CANCEL ORDER</div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

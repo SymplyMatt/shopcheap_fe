@@ -1,9 +1,8 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductList from "./ProductList";
-import { AppDispatch, RootState } from "../../redux/store";
+import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import utils, { apiRequest } from "../../utils/utils";
 
 const Summary = () => {
@@ -19,8 +18,12 @@ const Summary = () => {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         };
         const validemail = isValidEmail(deliveryInformation.email);
-        setDisabled(!validemail || !deliveryInformation.firstname || !deliveryInformation.lastname || deliveryInformation.phone.length !== 10 || deliveryInformation.address.length < 7 || !deliveryInformation.state || loading);
-    },[deliveryInformation, loading]);
+        if (page?.includes('cart')) {
+            setDisabled(cart.length < 1);
+        } else {
+            setDisabled(!validemail || !deliveryInformation.firstname || !deliveryInformation.lastname || deliveryInformation.phone.length !== 10 || deliveryInformation.address.length < 7 || !deliveryInformation.state || loading);
+        }
+    },[deliveryInformation, loading, page]);
     const submit = async () =>{
         setLoading(true);
         try {
@@ -41,7 +44,7 @@ const Summary = () => {
                 const checkoutUrl = response.data.order.payments?.[0].link;
                 window.location.replace(checkoutUrl);
             }else{
-                
+                navigate('/orders');
             }
         } catch (error) {
             setLoading(false);
@@ -73,9 +76,10 @@ const Summary = () => {
                     </div>
                     <div className="w-full h-[1px] bg-[#D6D6D5] mt-[12px]"></div>
                     {page !== 'payment' ? <>
-                        <div className={`flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px] ${!disabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`} 
+                        <div className={`flex w-full items-center justify-center bg-[#141511] cursor-pointer h-[48px] text-white mt-[12px] ${!disabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}
                             onClick={()=>{
-                                submit();
+                                page?.includes('cart') && cart.length > 0 && navigate('/checkout/delivery');
+                                !page?.includes('cart') && submit();
                             }}>
                             CHECKOUT
                         </div>
