@@ -5,27 +5,6 @@ const Footer = () => {
     const { showAccount } = useSelector((state: RootState) => state.app);
     return (
         <div className={`w-full flex flex-col justify-center items-center ${!showAccount && "pt-[24px]"} thisisfooter`}>
-            {!showAccount && <div className={`w-full bg-[#FF8A00] grid grid-cols-1 tmd:grid-cols-2 px-[20px] tmd:px-[10%] py-[50px] gap-[20px] tmd:gap-[0px]`}>
-                <div className="flex flex-col col-span-1 justify-center">
-                    <div className="tmd:w-[78%] flex flex-col justify-center gap-[16px]">
-                        <div className="text-[26px] tmd:text-[36px] font-bold leading-[36px] tracking-[0%] uppercase tmd:text-justify">Get the latest updates and exclusive offers</div>
-                        <div className="text-[18px] font-normal leading-[24px] tracking-[0%]">Sign-up  to receive DREST emails and get updates on new arrivals, sales, exclusive offers, and more!</div>
-                    </div>
-                </div>
-                <div className="flex flex-col col-span-1 justify-center gap-[12px]">
-                    <div className="text-[14px] font-bold leading-[19.12px] tracking-[0%]">Enter email addresss<span className="text-[#8F0024]">*</span></div>
-                        <div className="w-full grid grid-cols-1 tmd:grid-cols-[1fr_157px] items-center gap-[20px]"> 
-                            <input type="text" className="h-[46px] border border-black outline-none focus:outline-none w-full p-[16px]"/> 
-                            <div className="h-[48px] w-full tmd:w-[157px] bg-[#000000] border border-black px-[36px] text-white cursor-pointer flex items-center justify-center uppercase text-[18px] font-semibold leading-[24px] tracking-[2%] transition-transform duration-200 hover:scale-[0.9]">
-                                Subscribe
-                            </div>
-                        </div>
-                    <div className="w-full grid grid-cols-1 tmd:grid-cols-[1fr_157px] items-center justify-center gap-[20px]">
-                        <div className="text-[14px] font-normal leading-[19.12px] tracking-[0%] text-justify w-full"><span className="text-[#8F0024]">*</span>By entering my email address, i agree to receive DREST offers, promotions, other commercial messages related to our partners.</div>
-                        <div className=" w-[157px]"></div>
-                    </div>
-                </div>
-            </div>}
             <div className="flex w-full bg-black flex-col gap-[50px] tmd:gap-[100px] text-[#E6E6E6] px-[20px] tmd:px-[50px] py-[70px]">
                 <div className="grid grid-cols-1 tmd:grid-cols-5 w-full gap-[50px]">
                     <div className="flex flex-col w-full gap-[50px] col-span-1 tmd:col-span-3 tmd:pr-[50px] order-2 tmd:order-1">
