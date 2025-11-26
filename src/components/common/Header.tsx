@@ -44,7 +44,7 @@ const Header = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="flex items-center gap-[8px]"><img src="/images/headphone.svg" /> Need help? <span className="font-bold">+216 50 660006</span></div>
+                    <div className="flex items-center gap-[8px]"><img src="/images/headphone.svg" /> Need help? <span className="font-bold">+234 703 135 5990</span></div>
                 </div>
                 {!location.pathname.includes('/orders') ? <div className="items-center gap-[16px] uppercase flex tmd:hidden w-full px-[20px] py-[10px]">
                         {["women", "men", "kids", "home", "beauty"].map((category, index) => (
@@ -54,7 +54,7 @@ const Header = () => {
                         ))}
                 </div> : ''}
             </div>
-            <MenuLinks hoveredMenu={hoveredMenu} setHoveredMenu={setHoveredMenu}/>
+            {/* <MenuLinks hoveredMenu={hoveredMenu} setHoveredMenu={setHoveredMenu}/> */}
         </>
     )
 }

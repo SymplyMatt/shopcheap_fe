@@ -11,13 +11,13 @@ const Orders = () => {
     useEffect(()=>{
         async function getUserOrders() {
             setLoading(true);
-            const response = await apiRequest("orders");
+            const response = await apiRequest("orders/user");
             setLoading(false);
             const orders = response?.data?.orders || [];
             setOrders(orders);
         }
         orders.length === 0 && getUserOrders();
-    }),[];
+    },[]);
     return (
         <Layout headerGap="">
             <div className="w-full grid grid-cols-1 tmd:grid-cols-[360px_1fr] items-center justify-center">

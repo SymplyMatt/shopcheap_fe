@@ -3,15 +3,23 @@ import { AppDispatch, RootState } from '../../redux/store';
 import { useDispatch } from 'react-redux';
 import { setAuthPage } from '../../redux/states/auth';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { setShowLogout } from '../../redux/states/app';
 
 const UserInfo = () => {
-    const { loggedInUser } = useSelector((state: RootState) => state.app);
+    const { loggedInUser, cart } = useSelector((state: RootState) => state.app);
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
     const [showLanguages, setShowLanguages] = useState(false);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
+    const cartQuantity = useMemo(() => cart.reduce((total, item) => total + item.quantity, 0), [cart]);
+    const cartTotal = useMemo(
+        () => cart.reduce((total, item) => {
+            const price = item.product.productOptions?.[0]?.price || 0;
+            return total + (item.quantity * price);
+        }, 0),
+        [cart]
+    );
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent): void => {
             if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -62,7 +70,17 @@ const UserInfo = () => {
                 </div>}
             </div>
         }
-        <img src="/images/wish.svg" className="cursor-pointer" onClick={()=>navigate('/cart')}/>
+        <div className="hidden tmd:flex items-center gap-[6px] cursor-pointer" onClick={()=>navigate('/cart')}>
+            <div className="relative">
+                <img src="/images/wish.svg" />
+                <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-[4px] rounded-full bg-[#D52B56] text-white text-[11px] font-semibold flex items-center justify-center">
+                    {cartQuantity}
+                </div>
+            </div>
+            <div className="text-[14px] font-semibold text-[#141511] whitespace-nowrap">
+                ₦{cartTotal.toLocaleString()}
+            </div>
+        </div>
         {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" style={{ height: "32px"}} className='cursor-pointer' onClick={() => dispatch(setSearchMode('empty'))}><path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z"/></svg> */}
     </div>
   )
