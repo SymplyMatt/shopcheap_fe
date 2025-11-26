@@ -9,12 +9,12 @@ body{
 }
 .slider_hero{
     .slider_home{
-        height: calc(100vh - 228px) !important;
+        height: calc(100vh - 188px) !important;
         @media screen and (max-width: 1000px) {
             height: 280px !important;
         }
         .sliderone{
-            height: calc(100vh - 228px) !important;
+            height: calc(100vh - 168px) !important;
             @media screen and (max-width: 1000px) {
                 height: 280px !important;
             }
@@ -24,7 +24,7 @@ body{
         }
         .slidertwo{
             width: 100%;
-            height: calc(100vh - 228px) !important;
+            height: calc(100vh - 168px) !important;
             @media screen and (max-width: 1000px) {
                 height: 280px !important;
             }
@@ -37,7 +37,7 @@ body{
     }
     .swiper-slide{
         margin-right: 0px !important;
-        height: calc(100vh - 228px) !important;
+        height: calc(100vh - 168px) !important;
         @media screen and (max-width: 1000px) {
             height: 280px !important;
         }
