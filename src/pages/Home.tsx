@@ -31,29 +31,39 @@ const Home = () => {
     return (
         <Layout>
             <HeroSlider />
-            {categories.length ? (
-                <ScrollReveal delay={0.2}>
-                    <RoundCategoriesSlider categories={categories} />
+            {categories.length > 0 && (
+                <div className="w-full">
+                    <ScrollReveal delay={0.2}>
+                        <RoundCategoriesSlider categories={categories} />
+                    </ScrollReveal>
+                </div>
+            )}
+            <div className="w-full">
+                <ScrollReveal delay={0.3}>
+                    <FlashSales />
                 </ScrollReveal>
-            ) : <></>}
-            <ScrollReveal delay={0.3}>
-                <FlashSales />
-            </ScrollReveal>
-            {topSellingProducts.length ? (
-                <ScrollReveal delay={0.2}>
-                    <CategoriesAndProducts title="Top Selling" productsToDisplay={topSellingProducts}/>
-                </ScrollReveal>
-            ) : <></>}
-            {newArrivals.length ? (
-                <ScrollReveal delay={0.2}>
-                    <NewArrivals />
-                </ScrollReveal>
-            ) : <></>}
-            {products.length ? (
-                <ScrollReveal delay={0.2}>
-                    <CategoriesAndProducts title="New Stock" productsToDisplay={[...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}/>
-                </ScrollReveal>
-            ) : <></>}
+            </div>
+            {topSellingProducts.length > 0 && (
+                <div className="w-full">
+                    <ScrollReveal delay={0.2}>
+                        <CategoriesAndProducts title="Top Selling" productsToDisplay={topSellingProducts}/>
+                    </ScrollReveal>
+                </div>
+            )}
+            {newArrivals.length > 0 && (
+                <div className="w-full">
+                    <ScrollReveal delay={0.2}>
+                        <NewArrivals />
+                    </ScrollReveal>
+                </div>
+            )}
+            {products.length > 0 && (
+                <div className="w-full">
+                    <ScrollReveal delay={0.2}>
+                        <CategoriesAndProducts title="New Stock" productsToDisplay={[...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}/>
+                    </ScrollReveal>
+                </div>
+            )}
         </Layout>
     );
 }
