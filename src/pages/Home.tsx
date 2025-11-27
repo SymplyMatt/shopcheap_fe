@@ -8,6 +8,7 @@ import RoundCategoriesSlider from "../components/home/RoundCategoriesSlider";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { apiRequest, Product, Response } from "../utils/utils";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const Home = () => {
     const { categories, products, newArrivals } = useSelector((state: RootState) => state.app);
@@ -30,11 +31,29 @@ const Home = () => {
     return (
         <Layout>
             <HeroSlider />
-            {categories.length ? <RoundCategoriesSlider categories={categories} /> : <></>}
-            <FlashSales />
-            {topSellingProducts.length ? <CategoriesAndProducts title="Top Selling" productsToDisplay={topSellingProducts}/> : <></>}
-            {newArrivals.length ? <NewArrivals /> : <></>}
-            {products.length ? <CategoriesAndProducts title="New Stock" productsToDisplay={[...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}/> : <></>}
+            {categories.length ? (
+                <ScrollReveal delay={0.2}>
+                    <RoundCategoriesSlider categories={categories} />
+                </ScrollReveal>
+            ) : <></>}
+            <ScrollReveal delay={0.3}>
+                <FlashSales />
+            </ScrollReveal>
+            {topSellingProducts.length ? (
+                <ScrollReveal delay={0.2}>
+                    <CategoriesAndProducts title="Top Selling" productsToDisplay={topSellingProducts}/>
+                </ScrollReveal>
+            ) : <></>}
+            {newArrivals.length ? (
+                <ScrollReveal delay={0.2}>
+                    <NewArrivals />
+                </ScrollReveal>
+            ) : <></>}
+            {products.length ? (
+                <ScrollReveal delay={0.2}>
+                    <CategoriesAndProducts title="New Stock" productsToDisplay={[...products].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())}/>
+                </ScrollReveal>
+            ) : <></>}
         </Layout>
     );
 }

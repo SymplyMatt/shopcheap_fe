@@ -8,6 +8,7 @@ import Layout from "./Layout";
 import { RootState, AppDispatch } from "../redux/store";
 import { setProducts, setTotalPages, setCurrentPage } from "../redux/states/app";
 import { apiRequest, Response } from "../utils/utils";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const AllResults = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -54,8 +55,12 @@ const AllResults = () => {
 
     return (
         <Layout>
-            <CategoriesAndProducts showTitle={false} titleComponent={<Header />} productsToDisplay={products}/>
-            <Pagination />
+            <ScrollReveal delay={0.2}>
+                <CategoriesAndProducts showTitle={false} titleComponent={<Header />} productsToDisplay={products}/>
+            </ScrollReveal>
+            <ScrollReveal delay={0.3}>
+                <Pagination />
+            </ScrollReveal>
         </Layout>
     );
 };

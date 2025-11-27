@@ -8,6 +8,7 @@ import Layout from "./Layout";
 import Loader from "../components/common/Loader";
 import { RootState } from "../redux/store";
 import { apiRequest, Product as ProductInterface } from "../utils/utils";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const Product = () => {
   const { products } = useSelector((state: RootState) => state.app);
@@ -53,9 +54,17 @@ const Product = () => {
 
   return (
     <Layout>
-      <ProductHero product={product}/>
-      <Description product={product}/>
-      {products.length > 0 && <UpsellSlider products={upsells} />}
+      <ScrollReveal delay={0.1}>
+        <ProductHero product={product}/>
+      </ScrollReveal>
+      <ScrollReveal delay={0.2}>
+        <Description product={product}/>
+      </ScrollReveal>
+      {products.length > 0 && (
+        <ScrollReveal delay={0.3}>
+          <UpsellSlider products={upsells} />
+        </ScrollReveal>
+      )}
     </Layout>
   );
 };

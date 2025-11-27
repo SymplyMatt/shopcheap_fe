@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import CategoriesAndProducts from "../components/home/CategoriesAndProducts";
 import { apiRequest, Product, Response } from "../utils/utils";
-import Loader from "../components/common/Loader";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const Header = (totalProducts: number) => {
     return (
@@ -31,45 +31,34 @@ const Header = (totalProducts: number) => {
 const InSeason = () => {
     const [inSeasonProducts, setInSeasonProducts] = useState<Product[]>([]);
     const [totalProducts, setTotalProducts] = useState(0);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchInSeasonProducts = async () => {
             try {
-                setLoading(true);
                 const response: Response = await apiRequest("products");
                 const products = response.data;
                 
                 if (products?.results) {
-                    // Filter products where inSeason is true
                     const filtered = products.results.filter((product: Product) => product.inSeason === true);
                     setInSeasonProducts(filtered);
                     setTotalProducts(filtered.length);
                 }
             } catch (err) {
                 console.error("Error fetching in-season products:", err);
-            } finally {
-                setLoading(false);
             }
         };
         fetchInSeasonProducts();
     }, []);
 
-    if (loading) {
-        return (
-            <Layout>
-                <Loader />
-            </Layout>
-        );
-    }
-
     return (
         <Layout>
-            <CategoriesAndProducts
-                productsToDisplay={inSeasonProducts}
-                titleComponent={Header(totalProducts)}
-                showTitle={false}
-            />
+            <ScrollReveal delay={0.2}>
+                <CategoriesAndProducts
+                    productsToDisplay={inSeasonProducts}
+                    titleComponent={Header(totalProducts)}
+                    showTitle={false}
+                />
+            </ScrollReveal>
         </Layout>
     );
 };

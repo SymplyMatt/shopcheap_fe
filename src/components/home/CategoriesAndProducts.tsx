@@ -4,6 +4,7 @@ import { apiRequest, Product, Response, Category } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useLocation } from "react-router-dom";
+import ScrollReveal from "../common/ScrollReveal";
 
 interface CategoriesAndProductsProps {
   title?: string;
@@ -110,7 +111,9 @@ const CategoriesAndProducts: React.FC<CategoriesAndProductsProps> = ({
 
       <div className="w-full grid grid-cols-2 tmd:grid-cols-4">
         {filteredProducts.map((product, index) => (
-          <CategoriesAndProductsProduct key={index} product={product} />
+          <ScrollReveal key={index} delay={0.05 * (index % 4)}>
+            <CategoriesAndProductsProduct product={product} />
+          </ScrollReveal>
         ))}
       </div>
 

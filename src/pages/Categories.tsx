@@ -3,6 +3,7 @@ import Layout from "./Layout";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiRequest, Product } from "../utils/utils";
+import ScrollReveal from "../components/common/ScrollReveal";
 
 const Header = (categoryName: string, totalProducts: number) => {
     return (
@@ -50,11 +51,13 @@ const Categories = () => {
 
     return (
         <Layout>
-            <CategoriesAndProducts
-                productsToDisplay={categoryProducts}
-                titleComponent={Header(categoryName,totalProducts)}
-                showTitle={false}
-            />
+            <ScrollReveal delay={0.2}>
+                <CategoriesAndProducts
+                    productsToDisplay={categoryProducts}
+                    titleComponent={Header(categoryName,totalProducts)}
+                    showTitle={false}
+                />
+            </ScrollReveal>
         </Layout>
     );
 };
