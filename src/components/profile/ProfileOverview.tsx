@@ -1,25 +1,70 @@
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { setShowLogout } from "../../redux/states/app";
+import { apiRequest } from "../../utils/utils";
+import { Order } from "../../utils/utils";
 
 const ProfileOverview = () => {
     const dispatch = useDispatch<AppDispatch>();
-  return (
+    const { loggedInUser } = useSelector((state: RootState) => state.app);
+    const [totalProductsPurchased, setTotalProductsPurchased] = useState<number>(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                setLoading(true);
+                const response = await apiRequest("orders/user");
+                if (response.status === 200) {
+                    const orders: Order[] = response.data?.orders || [];
+                    // Calculate total products purchased (sum of all quantities across all orders)
+                    const total = orders.reduce((sum, order) => {
+                        return sum + order.orderProducts.reduce((orderSum, product) => {
+                            return orderSum + product.quantity;
+                        }, 0);
+                    }, 0);
+                    setTotalProductsPurchased(total);
+                }
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOrders();
+    }, []);
+
+    const formatJoinDate = (dateString: string | undefined): string => {
+        if (!dateString) return "N/A";
+        try {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return "N/A";
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            return `${day.toString().padStart(2, '0')} ${month} ${year}`;
+        } catch {
+            return "N/A";
+        }
+    };
+
+    return (
     <div className="tmd:col-span-2 tmd:border-l tmd:border-[#D6D6D5] h-full p-[20px] tmd:p-[24px] gap-[20px] flex flex-col">
         <div className="flex flex-col gap-[20px] border-b border-[#D6D6D5] pb-[20px]">
             <div className="text-[#141511] font-medium text-[24px]">Overview</div>
             <div className="flex items-center justify-between w-full">
                 <div className="flex flex-col text-left gap-[4px]">
                     <div className="text-[#676764] text-[16px] leading-[130%]">Joined Drest on</div>
-                    <div className="text-[#141511] text-[18px] leading-[150%] font-medium">08 August 2025</div>
+                    <div className="text-[#141511] text-[18px] leading-[150%] font-medium">{formatJoinDate(loggedInUser?.createdAt)}</div>
                 </div>
                 <div className="flex flex-col text-left gap-[4px]">
                     <div className="text-[#676764] text-[16px] leading-[130%]">Purchase till date</div>
-                    <div className="text-[#141511] text-[18px] leading-[150%] font-medium">65 Products</div>
-                </div>
-                <div className="flex flex-col text-left gap-[4px]">
-                    <div className="text-[#676764] text-[16px] leading-[130%]">Total Wishlist</div>
-                    <div className="text-[#141511] text-[18px] leading-[150%] font-medium">120 Products</div>
+                    <div className="text-[#141511] text-[18px] leading-[150%] font-medium">
+                        {loading ? "Loading..." : `${totalProductsPurchased} Products`}
+                    </div>
                 </div>
             </div>
         </div>

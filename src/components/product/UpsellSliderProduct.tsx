@@ -47,7 +47,7 @@ const UpsellSliderProduct: React.FC<CategoriesAndProductsProps> =({product}) => 
             }}>
             <div className="w-[300px] h-[400px] tmd:w-full tmd:h-[400px] bg-white border border-[#E6E6E6] flex items-center justify-center relative">
                 <img src={showImage} className="w-full h-full object-contain" />
-                {product.inSeason ? <div className="absolute top-[20px] right-[10px] bg-[#10583E] text-white py-[4px] px-[8px] rounded-[6px]"> in season</div> : ""}
+                {product.inSeason ? <div className="absolute top-[10px] tmd:top-[20px] right-[8px] tmd:right-[10px] bg-[#10583E] text-white py-[2px] tmd:py-[4px] px-[6px] tmd:px-[8px] rounded-[4px] tmd:rounded-[6px] text-[10px] tmd:text-[12px] leading-[14px] tmd:leading-[16px]"> in season</div> : ""}
                 <img src="/images/rec_plus.svg" className="cursor-pointer absolute bottom-[20px] right-[10px]" />
                 <div className="w-full h-[80px] border-t border-b border-[#D6D6D5] cursor-pointer absolute bottom-[0px] right-[0px] bg-white flex items-center justify-center p-[16px] opacity-0 translate-y-4 transition-all duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
                     <div

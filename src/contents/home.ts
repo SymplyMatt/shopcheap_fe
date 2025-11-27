@@ -1,85 +1,85 @@
 export const heroSlider:any = {
     "us": [
         {
-            "title1": "Fall in Love with Fashion",
-            "title2": "This Valentine's Day!",
-            "description": "Celebrate love in style! Shop our exclusive Valentine's Day collection and enjoy up to 50% off on romantic dresses, chic accessories, and more.",
+            "title1": "Fresh Groceries",
+            "title2": "Delivered to Your Door!",
+            "description": "Shop the freshest produce, quality meats, and pantry essentials. Get free delivery on orders over $50!",
             "btn": "SHOP NOW",
         },
         {
-            "title1": "Fresh Styles, Just for You!",
-            "title2": "Fresh Styles, Just for You!",
-            "description": "Our new arrivals are here to elevate your wardrobe. Discover the latest trends and be the first to own the season's hottest looks!",
+            "title1": "Quality Food, Great Prices!",
+            "title2": "Quality Food, Great Prices!",
+            "description": "Discover our wide selection of fresh fruits, vegetables, dairy products, and more. We bring you the best quality food at unbeatable prices every day!",
             "btn": "SHOP NOW",
         },
     ],
     "uk": [
         {
-            "title1": "Fall in Love with Fashion",
-            "title2": "This Valentine's Day!",
-            "description": "Celebrate love in style! Shop our exclusive Valentine's Day collection and enjoy up to 50% off on romantic dresses, chic accessories, and more.",
+            "title1": "Fresh Groceries",
+            "title2": "Delivered to Your Door!",
+            "description": "Shop the freshest produce, quality meats, and pantry essentials. Enjoy up to 50% off on select items and get free delivery on orders over £40!",
             "btn": "SHOP NOW",
         },
         {
-            "title1": "Fresh Styles, Just for You!",
-            "title2": "Fresh Styles, Just for You!",
-            "description": "Our new arrivals are here to elevate your wardrobe. Discover the latest trends and be the first to own the season's hottest looks!",
+            "title1": "Quality Food, Great Prices!",
+            "title2": "Quality Food, Great Prices!",
+            "description": "Discover our wide selection of fresh fruits, vegetables, dairy products, and more. We bring you the best quality food at unbeatable prices every day!",
             "btn": "SHOP NOW",
         },
     ],
     "french": [
         {
-            "title1": "Tombez amoureux de la mode",
-            "title2": "Ce jour de la Saint-Valentin !",
-            "description": "Célébrez l'amour avec style ! Découvrez notre collection exclusive de la Saint-Valentin et profitez de réductions allant jusqu'à 50 % sur les robes romantiques, les accessoires chics, et bien plus.",
+            "title1": "Épicerie Fraîche",
+            "title2": "Livrée à Votre Porte !",
+            "description": "Achetez les produits les plus frais, des viandes de qualité et des produits de base. Profitez de réductions allant jusqu'à 50 % sur certains articles et de la livraison gratuite pour les commandes de plus de 50 € !",
             "btn": "ACHETER MAINTENANT"
         },
         {
-            "title1": "Nouveaux styles, rien que pour vous !",
-            "title2": "Nouveaux styles, rien que pour vous !",
-            "description": "Nos nouveautés sont là pour sublimer votre garde-robe. Découvrez les dernières tendances et soyez le premier à porter les looks les plus en vogue de la saison !",
+            "title1": "Aliments de Qualité, Prix Imbattables !",
+            "title2": "Aliments de Qualité, Prix Imbattables !",
+            "description": "Découvrez notre large sélection de fruits frais, légumes, produits laitiers et bien plus encore. Nous vous apportons les meilleurs aliments de qualité à des prix imbattables chaque jour !",
             "btn": "ACHETER MAINTENANT"
         }          
     ],
     "german": [
         {
-            "title1": "Verliebe dich in Mode",
-            "title2": "Zum Valentinstag!",
-            "description": "Feiere die Liebe mit Stil! Entdecke unsere exklusive Valentinstagskollektion und spare bis zu 50 % auf romantische Kleider, schicke Accessoires und vieles mehr.",
+            "title1": "Frische Lebensmittel",
+            "title2": "Direkt zu Ihnen Geliefert!",
+            "description": "Kaufen Sie die frischesten Produkte, qualitativ hochwertiges Fleisch und Grundnahrungsmittel. Genießen Sie bis zu 50 % Rabatt auf ausgewählte Artikel und kostenlosen Versand bei Bestellungen über 50 €!",
             "btn": "JETZT SHOPPEN"
         },
         {
-            "title1": "Frische Styles, nur für dich!",
-            "title2": "Frische Styles, nur für dich!",
-            "description": "Unsere Neuankömmlinge sind da, um deine Garderobe aufzuwerten. Entdecke die neuesten Trends und sei der Erste, der die heißesten Looks der Saison trägt!",
+            "title1": "Qualitätsessen, Tolle Preise!",
+            "title2": "Qualitätsessen, Tolle Preise!",
+            "description": "Entdecken Sie unsere große Auswahl an frischem Obst, Gemüse, Milchprodukten und mehr. Wir bieten Ihnen jeden Tag die beste Qualität zu unschlagbaren Preisen!",
             "btn": "JETZT SHOPPEN"
         }          
     ],
     "portuguese": [
         {
-            "title1": "Apaixone-se pela moda",
-            "title2": "Neste Dia dos Namorados!",
-            "description": "Celebre o amor com estilo! Compre a nossa coleção exclusiva do Dia dos Namorados e aproveite até 50% de desconto em vestidos românticos, acessórios elegantes e muito mais.",
+            "title1": "Mantimentos Frescos",
+            "title2": "Entregues na Sua Porta!",
+            "description": "Compre os produtos mais frescos, carnes de qualidade e itens essenciais. Aproveite até 50% de desconto em itens selecionados e frete grátis em pedidos acima de R$ 200!",
             "btn": "COMPRE AGORA"
         },
         {
-            "title1": "Novos estilos, só para você!",
-            "title2": "Novos estilos, só para você!",
-            "description": "Nossas novidades chegaram para transformar seu guarda-roupa. Descubra as últimas tendências e seja o primeiro a usar os looks mais quentes da temporada!",
+            "title1": "Alimentos de Qualidade, Ótimos Preços!",
+            "title2": "Alimentos de Qualidade, Ótimos Preços!",
+            "description": "Descubra nossa ampla seleção de frutas frescas, vegetais, laticínios e muito mais. Trazemos os melhores alimentos de qualidade com preços imbatíveis todos os dias!",
             "btn": "COMPRE AGORA"
         }
     ],
     "tunisian": [
         {
-            "title1": "اقع في حب الموضة",
-            "title2": "في عيد الحب هذا!",
-            "description": "احتفل بالحب بأناقة! تسوق مجموعتنا الحصرية لعيد الحب وتمتع بخصم يصل إلى 50٪ على الفساتين الرومانسية، والإكسسوارات الأنيقة، والمزيد.",
+            "title1": "بقالة طازجة",
+            "title2": "توصيل إلى باب منزلك!",
+            "description": "تسوق المنتجات الطازجة واللحوم عالية الجودة والمواد الغذائية الأساسية. استمتع بخصم يصل إلى 50٪ على منتجات مختارة وتوصيل مجاني للطلبات التي تزيد عن 150 دينار!",
             "btn": "تسوق الآن"
         },
         {
-            "title1": "أحدث صيحات الموضة، خصيصًا لك!",
-            "title2": "أحدث صيحات الموضة، خصيصًا لك!",
-            "description": "وصلت تشكيلتنا الجديدة لتجدد خزانة ملابسك. اكتشف أحدث الصيحات وكن أول من يقتني أكثر الإطلالات رواجًا لهذا الموسم!",
+            "title1": "أطعمة عالية الجودة، أسعار رائعة!",
+            "title2": "أطعمة عالية الجودة، أسعار رائعة!",
+            "description": "اكتشف مجموعتنا الواسعة من الفواكه والخضروات الطازجة ومنتجات الألبان والمزيد. نقدم لك أفضل الأطعمة عالية الجودة بأسعار لا تقبل المنافسة كل يوم!",
             "btn": "تسوق الآن"
         }
     ],

@@ -6,9 +6,11 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { heroSlider } from "../../contents/home";
+import { useNavigate } from "react-router-dom";
 
 const HeroSlider = () => {
     const { language } = useSelector((state: RootState) => state.app);
+    const navigate = useNavigate();
     return (
         <div className="w-full flex justify-center slider_hero">
             <Swiper
@@ -30,7 +32,10 @@ const HeroSlider = () => {
                                 { heroSlider[language][0].description }
                             </div>
                         </div>
-                        <div className="bg-white h-[44px] tmd:h-[48px] w-fit px-[24px] tmd:px-[36px] text-black flex items-center justify-center tracking-[2%] text-[16px] font-medium cursor-pointer transition-transform duration-200 hover:scale-90 transition-transform duration-200 hover:scale-[0.9]">
+                        <div 
+                            className="bg-white h-[44px] tmd:h-[48px] w-fit px-[24px] tmd:px-[36px] text-black flex items-center justify-center tracking-[2%] text-[16px] font-medium cursor-pointer transition-transform duration-200 hover:scale-90 transition-transform duration-200 hover:scale-[0.9]"
+                            onClick={() => navigate('/store')}
+                        >
                             { heroSlider[language][0].btn }
                         </div>
                     </div>
@@ -45,7 +50,10 @@ const HeroSlider = () => {
                                 { heroSlider[language][1].description }
                             </div>
                         </div>
-                        <div className="bg-black text-[#E6E6E6] h-[48px] w-fit px-[24px] tmd:px-[36px] flex items-center justify-center tracking-[2%] text-[16px] font-medium cursor-pointer transition-transform duration-200 hover:scale-90">
+                        <div 
+                            className="bg-black text-[#E6E6E6] h-[48px] w-fit px-[24px] tmd:px-[36px] flex items-center justify-center tracking-[2%] text-[16px] font-medium cursor-pointer transition-transform duration-200 hover:scale-90"
+                            onClick={() => navigate('/store')}
+                        >
                             { heroSlider[language][1].btn }
                         </div>
                     </div>

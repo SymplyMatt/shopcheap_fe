@@ -289,7 +289,7 @@ const Logout = () => {
             dispatch(setLoggedInUser(null));
             dispatch(setShowLogout(false));
             navigate('/');
-            localStorage.clear();
+            utils.clearUserData();
             utils.createSuccessNotification("Logged Out Successfully", 3000)
           }}>YES, LOG OUT</div>
         </div>

@@ -178,6 +178,81 @@ export default class utils {
       }).join(''));
       return JSON.parse(jsonPayload);
     }
+    static saveUserWithExpiry(user: any, token: string) {
+      try {
+        const decoded = this.decodeJWT(token);
+        const expiryTime = decoded.exp ? decoded.exp * 1000 : null; // Convert to milliseconds
+        
+        if (!expiryTime) {
+          console.warn('Token does not have expiry time');
+          // Fallback: save without expiry (existing behavior)
+          localStorage.setItem("userToken", token);
+          localStorage.setItem("user", JSON.stringify({ ...user, token }));
+          return;
+        }
+
+        const userData = {
+          ...user,
+          token,
+          expiryTime
+        };
+
+        localStorage.setItem("userToken", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("userExpiry", expiryTime.toString());
+      } catch (error) {
+        console.error('Error saving user with expiry:', error);
+        // Fallback: save without expiry
+        localStorage.setItem("userToken", token);
+        localStorage.setItem("user", JSON.stringify({ ...user, token }));
+      }
+    }
+    static isTokenExpired(): boolean {
+      try {
+        const expiryTime = localStorage.getItem("userExpiry");
+        if (!expiryTime) {
+          // If no expiry stored, check token directly
+          const token = localStorage.getItem("userToken");
+          if (!token) return true;
+          
+          try {
+            const decoded = this.decodeJWT(token);
+            const expiry = decoded.exp ? decoded.exp * 1000 : null;
+            if (!expiry) return false; // Can't determine expiry
+            return Date.now() >= expiry;
+          } catch {
+            return true; // Invalid token
+          }
+        }
+        
+        return Date.now() >= parseInt(expiryTime, 10);
+      } catch (error) {
+        console.error('Error checking token expiry:', error);
+        return true; // Assume expired on error
+      }
+    }
+    static clearUserData() {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("userExpiry");
+    }
+    static getUserFromStorage(): any | null {
+      try {
+        if (this.isTokenExpired()) {
+          this.clearUserData();
+          return null;
+        }
+        
+        const userStr = localStorage.getItem("user");
+        if (!userStr) return null;
+        
+        return JSON.parse(userStr);
+      } catch (error) {
+        console.error('Error getting user from storage:', error);
+        this.clearUserData();
+        return null;
+      }
+    }
     static formatDateAndTime(date : Date) {
       const options : any = { 
         weekday: 'long', 
@@ -255,12 +330,17 @@ export async function apiRequest(
       url: baseurl + endpoint,
       data: body,
     };
-    const userToken = localStorage.getItem('userToken');
-    if (userToken) {
-      config.headers = {
-        ...config.headers,
-        'Authorization': `Bearer ${userToken}`
-      };
+    // Check if token is expired before making request
+    if (utils.isTokenExpired()) {
+      utils.clearUserData();
+    } else {
+      const userToken = localStorage.getItem('userToken');
+      if (userToken) {
+        config.headers = {
+          ...config.headers,
+          'Authorization': `Bearer ${userToken}`
+        };
+      }
     }
     const res = await axios(config);
     return {

@@ -13,12 +13,21 @@ import Orders from "../pages/Orders";
 import Addresses from "../pages/Addresses";
 import Profile from "../pages/Profile";
 import Categories from "../pages/Categories";
+import AllCategories from "../pages/AllCategories";
+import Store from "../pages/Store";
+import InSeason from "../pages/InSeason";
+import About from "../pages/About";
+import Contact from "../pages/Contact";
 
 const Routes = (): JSX.Element => {
   const pageRoutes = [
     {
       path: "/",
       element: <Home />
+    },
+    {
+      path: "/categories",
+      element: <AllCategories />
     },
     {
       path: "/login",
@@ -71,6 +80,22 @@ const Routes = (): JSX.Element => {
     {
       path: "/search/allresults", 
       element: <AllResults />
+    },
+    {
+      path: "/store",
+      element: <Store />
+    },
+    {
+      path: "/in-season",
+      element: <InSeason />
+    },
+    {
+      path: "/about",
+      element: <About />
+    },
+    {
+      path: "/contact",
+      element: <Contact />
     },
   ];
 

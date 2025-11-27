@@ -5,6 +5,7 @@ import { RootState } from '../../redux/store';
 
 const FlashSales = () => {
   const { products } = useSelector((state: RootState) => state.app);
+  const inSeasonProducts = products.filter(product => product.inSeason === true);
 
   return (
     <>
@@ -14,7 +15,7 @@ const FlashSales = () => {
                 IN SEASON</div>
               <div className="uppercase text-white underline text-[16px] font-medium leading-[24px] tracking-[0%] cursor-pointer absolute right-[16px] top-1/2 -translate-y-1/2 tmd:static  tmd:top-auto tmd:translate-y-0">see all</div>
           </div>
-          { products.length > 0 ? <UpsellSlider showTitle={false} products={ products }/> : <></> }
+          { inSeasonProducts.length > 0 ? <UpsellSlider showTitle={false} products={ inSeasonProducts }/> : <></> }
       </div>
       <img src={homeimageone} className="w-full h-auto" />
     </>

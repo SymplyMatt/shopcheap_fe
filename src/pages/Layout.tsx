@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import Auth from "../components/common/Auth";
@@ -8,7 +9,7 @@ import Search from "../components/common/Search";
 import MobileFooter from "../components/common/MobileFooter";
 import AccountMobile from "../components/common/AccountMobile";
 import { apiRequest, Response } from "../utils/utils";
-import { setCategories, setNewArrivals, setProducts, setTotalPages } from "../redux/states/app";
+import { setCategories, setNewArrivals, setProducts, setTotalPages, setShowAccount } from "../redux/states/app";
 import Loader from "../components/common/Loader";
 import Logout from "../components/common/Logout";
 interface LayoutProps {
@@ -18,8 +19,16 @@ interface LayoutProps {
 
 const Layout = ({ children = <></>, headerGap = "tmd:gap-[24px]" }: LayoutProps) => {
     const dispatch = useDispatch();
+    const location = useLocation();
     const { authPage } = useSelector((state: RootState) => state.auth);
     const { searchMode, showAccount, products, showLogout, loading, newArrivals, categories } = useSelector((state: RootState) => state.app);
+
+    // Close account mobile when route changes
+    useEffect(() => {
+        if (showAccount) {
+            dispatch(setShowAccount(false));
+        }
+    }, [location.pathname, dispatch]);
 
     useEffect(() => {
         const fetchData = async () => {

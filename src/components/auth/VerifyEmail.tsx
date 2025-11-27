@@ -35,8 +35,7 @@ const VerifyEmail = () => {
             return
         }
         dispatch(setLoggedInUser({ ...response.data.user, token: response.data.accessToken }));
-        localStorage.setItem("userToken", response.data.accessToken);
-        localStorage.setItem("user", JSON.stringify({ ...response.data.user, token: response.data.accessToken }));
+        utils.saveUserWithExpiry(response.data.user, response.data.accessToken);
         dispatch(setAuthPage(null));
     }
 

@@ -11,12 +11,12 @@ body{
     .slider_home{
         height: calc(100vh - 188px) !important;
         @media screen and (max-width: 1000px) {
-            height: 280px !important;
+            height: 350px !important;
         }
         .sliderone{
             height: calc(100vh - 168px) !important;
             @media screen and (max-width: 1000px) {
-                height: 280px !important;
+                height: 350px !important;
             }
             background: url('/images/slideone.jpg') no-repeat center center;
             background-size: cover;
@@ -26,7 +26,7 @@ body{
             width: 100%;
             height: calc(100vh - 168px) !important;
             @media screen and (max-width: 1000px) {
-                height: 280px !important;
+                height: 350px !important;
             }
             background: url('/images/slidetwo.jpg') no-repeat center center;
             background-size: cover;
@@ -39,7 +39,7 @@ body{
         margin-right: 0px !important;
         height: calc(100vh - 168px) !important;
         @media screen and (max-width: 1000px) {
-            height: 280px !important;
+            height: 350px !important;
         }
         width: 100% !important;
     }
