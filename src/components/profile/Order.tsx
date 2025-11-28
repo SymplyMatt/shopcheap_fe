@@ -27,6 +27,20 @@ function formatDate(date: Date): string {
   const minutesStr = minutes.toString().padStart(2, '0');
   return `${day} ${month} ${year}, ${hours}:${minutesStr} ${ampm}`;
 }
+
+function getStatusColor(status: string): string {
+  const statusUpper = status?.toUpperCase() || '';
+  switch (statusUpper) {
+    case 'PENDING':
+      return '#D58618'; // Orange/Yellow - waiting
+    case 'DELIVERED':
+      return '#10B981'; // Green - success
+    case 'PAID':
+      return '#2563EB'; // Blue - paid
+    default:
+      return '#D58618'; // Default to orange
+  }
+}
 const Order: React.FC<MenuLinksProps> = ({order,index}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOrderDetails = () => {
@@ -54,7 +68,7 @@ const Order: React.FC<MenuLinksProps> = ({order,index}) => {
                         </div>
                         <div className="flex flex-col text-left gap-[4px]">
                             <div className="text-[#676764] text-[16px] leading-[130%]">Status order</div>
-                            <div className="text-[#D58618] text-[18px] leading-[150%] font-medium">On progress</div>
+                            <div className="text-[18px] leading-[150%] font-medium" style={{ color: getStatusColor(order.status) }}>{order.status}</div>
                         </div>
                     </div>
                     <img src={isOpen ? "/images/openorder.svg" : "/images/closeorder.svg"} onClick={toggleOrderDetails} className={`cursor-pointer transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}/>
@@ -70,7 +84,7 @@ const Order: React.FC<MenuLinksProps> = ({order,index}) => {
                     </div>
                     <div className="flex gap-[4px] col-span-1 justify-between items-center">
                         <div className="text-[#676764] text-[14px] leading-[130%]">Status order</div>
-                        <div className="text-[#D58618] text-[14px] leading-[150%] font-medium">On progress</div>
+                        <div className="text-[14px] leading-[150%] font-medium" style={{ color: getStatusColor(order.status) }}>{order.status}</div>
                     </div>
                 </div>
             </div>
@@ -136,17 +150,7 @@ const Order: React.FC<MenuLinksProps> = ({order,index}) => {
                                     </div> */}
                             </div>
                         </div>
-                        {/* <div className="w-full flex tmd:flex-row flex-col items-center p-[24px] justify-between gap-[20px] tmd:gap-[10px]">
-                            <div className="flex gap-[8px] max-w-[600px] text-[#676764] text-[14px] tmd:text-base">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9.99787 6.66671C9.88287 6.66671 9.78953 6.76004 9.79037 6.87504C9.79037 6.99004 9.8837 7.08337 9.9987 7.08337C10.1137 7.08337 10.207 6.99004 10.207 6.87504C10.207 6.76004 10.1137 6.66671 9.99787 6.66671" stroke="#676764" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10 17.5V17.5C5.8575 17.5 2.5 14.1425 2.5 10V10C2.5 5.8575 5.8575 2.5 10 2.5V2.5C14.1425 2.5 17.5 5.8575 17.5 10V10C17.5 14.1425 14.1425 17.5 10 17.5Z" stroke="#676764" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M9.9987 10V14.1667" stroke="#676764" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                                Order cancellations can only be made during the Review stage. If you cancel at this point, your full payment will be refunded.
-                            </div>
-                            <div className="h-[48px] bg-[#BD3322] text-white cursor-pointer flex items-center justify-center py-[8px] px-[24px] w-full tmd:w-fit">CANCEL ORDER</div>
-                        </div> */}
+
                     </div>
                 </div>
             </div>
