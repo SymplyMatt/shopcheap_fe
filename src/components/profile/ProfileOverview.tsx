@@ -68,12 +68,6 @@ const ProfileOverview = () => {
                 </div>
             </div>
         </div>
-        <div className="text-[#141511] font-medium text-[24px]">Login information</div>
-        <div className="col-span-1 flex flex-col gap-[8px]">
-            <label className="text-[#141511] font-semibold">Email</label>
-            <input type="text" className="h-[48px] border border-[#D6D6D5] p-[12px] w-full bg-[#F3F3F3] text-[#676764] outline-none" placeholder="johndoe@mail.com"/>
-        </div>
-        <div className="h-[48px] cursor-pointer text-[#141511] flex items-center justify-center border border-[#D6D6D5]">CHANGE PASSWORD</div>
         <div className="h-[48px] cursor-pointer text-[#141511] flex items-center justify-center text-[#BD3322] font-semibold mt-[50px] gap-[8px]"
             onClick={()=>{
                 dispatch(setShowLogout(true));
