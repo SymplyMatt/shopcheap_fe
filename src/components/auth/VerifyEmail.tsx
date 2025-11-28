@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { setAuthPage, setSignupValues } from "../../redux/states/auth";
 import { setLoggedInUser } from "../../redux/states/app";
 import { useEffect, useState } from "react";
-import { apiRequest } from "../../utils/utils";
+import utils, { apiRequest } from "../../utils/utils";
 import { useSelector } from "react-redux";
 
 const VerifyEmail = () => {

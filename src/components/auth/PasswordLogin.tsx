@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { setAuthPage, setLoginValues, setSignupValues } from "../../redux/states/auth";
 import { setLoggedInUser } from "../../redux/states/app";
 import { useSelector } from "react-redux";
-import { apiRequest } from "../../utils/utils";
+import utils, { apiRequest } from "../../utils/utils";
 import { useEffect, useState } from "react";
 
 const PasswordLogin = () => {
