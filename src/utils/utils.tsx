@@ -318,7 +318,7 @@ function normalizeHeaders(
   );
 }
 
-const baseurl = 'http://localhost:1235/';
+const baseurl = import.meta.env.VITE_BASEURL || 'http://localhost:1235/';
 export async function apiRequest(
   endpoint: string,
   method: Method = "GET",
