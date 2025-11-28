@@ -10,7 +10,7 @@ const Header = () => {
     }, [location.pathname]);
     return (
         <>
-            <div className="w-full flex flex-col bg-white/95 backdrop-blur border-b border-[#E6E6E6]">
+            <div className="w-full flex flex-col bg-white/95 backdrop-blur border-b border-[#E6E6E6] relative z-50">
                 <div
                     className={`w-full h-[70px] tmd:h-[92px] px-[20px] tmd:px-[50px] flex justify-between items-center gap-[24px]`}
                 >
